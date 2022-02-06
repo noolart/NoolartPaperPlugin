@@ -1,0 +1,61 @@
+name: NoolartPaperPlugin
+version: '${project.version}'
+main: com.noolart.noolartpaperplugin.NoolartPaperPlugin
+author: noolart
+api-version: 1.16
+commands:
+  pythonrun:
+    description: Исполняет Python файлы в папке с проектом с именем <filename>
+    usage: /pythonrun <codename>
+  copyBin:
+    description: Копирует область между выделенными точками и сохраняет её в бинарный файл в папку с проектом
+    usage: /copyBin <x> <y> <z> <filename>
+  pasteBin:
+    description: Вставляет область из названного бинарного файла с началом в первой выделенной точке
+    usage: /pasteBin <x> <y> <z> <filename>
+  copyCsvOld:
+    description: Копирует область между координатами игрока и точкой ~arg1 ~arg2 ~arg3 относительно игрока в csv файл в папку с проектом
+    usage: /copyCsv <filename> <arg1> <arg2> <arg3>
+  pasteCsvOld:
+    description: Вставляет область из названного csv файла с началом в координате
+    usage: /pasteCsv <filename> <height>
+  copyCsv:
+    description: Копирует область между выделенными точками и сохраняет её в csv файл в папку с проектом
+    usage: /cCsv <filename>
+  pasteCsv:
+    description: Вставляет область из названного csv файла с началом в первой выделенной точке
+    usage: /cCsv <filename>
+  randomGeneration:
+    description: Генерирует квадратный рандомный пласт моделей длиной 16*<distance>
+    usage: /randomGeneration <distance>
+  randomGenerationUseCommand:
+    description: Генерирует квадратный пласт пород длиной <distance>*<model_length>, состоящий из моделей, названных в аргументах с вероятностью появляния модели, указанной после этой самой модели
+    usage: /randomGenerationUseCommand <distance> <model_length> <model_1> <probability_1> <model_2> <probability_2> ...
+  modelFromImage:
+    description: Вставляет плоскую картинку в игру
+    usage: /modelFromImage <imagename>
+  mapFromImage:
+    description: Вставляет рельефную картинку в игру
+    usage: /mapFromImage <imagename>
+  generationFromCsv:
+    description: Вставляет модели в порядке, заданном в двумерном массиве
+    usage: /generationFromCsv <filename> <arr.length>
+  shop:
+    description: Открывает интерфейс магазина
+    usage: /shop
+  expShop:
+    description: Открывает интерфейс навыков
+    usage: /expShop
+  balance:
+    description: Возвращает баланс игрока
+    usage: /balance
+  pay:
+    description: Добавляет указанное кол-во $ на счет игрока
+    usage: /pay <howmany>
+  chest:
+    description: Секретная команда
+    usage: /chest <material>
+
+
+
+
