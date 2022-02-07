@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public class ExpShop implements CommandExecutor {
-
     private NoolartPaperPlugin plugin;
+
     public ExpShop(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
     }

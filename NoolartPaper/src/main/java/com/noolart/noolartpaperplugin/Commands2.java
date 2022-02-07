@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class Commands2 implements CommandExecutor {
-
     private NoolartPaperPlugin plugin;
 
     public Commands2(NoolartPaperPlugin noolartPaperPlugin) {
@@ -27,21 +26,17 @@ public class Commands2 implements CommandExecutor {
         if (args.length != 4) {
             return false;
         }
-
-        try {
-            String filename = args[3];
-            FileInputStream fileIs = new FileInputStream(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".bin");
+        String filename = args[3];
+        try (FileInputStream fileIs = new FileInputStream(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".bin")) {
             ObjectInputStream is = new ObjectInputStream(fileIs);
             String text = is.readLine();
 //			Bukkit.broadcastMessage(text);
             String[] textS = text.split("");
 
-
-            String full = "";
+            StringBuilder full = new StringBuilder();
             for (int i = 1; i <= textS.length; i = i + 2) {
                 String a = textS[i];
-                full = full + a;
-
+                full.append(a);
             }
 
             is.close();
@@ -49,7 +44,8 @@ public class Commands2 implements CommandExecutor {
             String name = sender.getName();
             Player p = Bukkit.getPlayer(name);
             Location h = p.getLocation();
-            String[] symbols = full.split(" ");
+            String[] symbols = full.toString().split(" ");
+
             int cx1 = (int) h.getX();
             int cy1 = (int) h.getY();
             int cz1 = (int) h.getZ();
@@ -76,6 +72,7 @@ public class Commands2 implements CommandExecutor {
                     }
                 }
             }
+
             Bukkit.broadcastMessage("Done!");
         } catch (IOException e1) {
             System.out.println("fileNotFound");

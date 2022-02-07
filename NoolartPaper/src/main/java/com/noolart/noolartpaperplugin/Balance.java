@@ -11,30 +11,27 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Balance implements CommandExecutor{
-
+public class Balance implements CommandExecutor {
     private NoolartPaperPlugin plugin;
+
     public Balance(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length>0){
+        if (args.length > 0) {
             return false;
         }
-        int balance;
-        Player p = Bukkit.getPlayer(sender.getName());
-        File balanceCheck = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator+"users"+File.separator  + sender.getName() +"_balance.csv");
 
-        try {
-            Scanner scan = new Scanner(balanceCheck);
-            balance = Integer.parseInt(scan.nextLine());
-            p.sendMessage(ChatColor.GOLD+ "Ваш баланс: "+ ChatColor.BOLD+ChatColor.LIGHT_PURPLE +balance+"$");
-            scan.close();
+        Player p = Bukkit.getPlayer(sender.getName());
+
+        try (Scanner scan = new Scanner(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + sender.getName() + "_balance.csv"))) {
+            int balance = Integer.parseInt(scan.nextLine());
+            p.sendMessage(ChatColor.GOLD + "Ваш баланс: " + ChatColor.BOLD + ChatColor.LIGHT_PURPLE + balance + "$");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
 
         return true;
     }

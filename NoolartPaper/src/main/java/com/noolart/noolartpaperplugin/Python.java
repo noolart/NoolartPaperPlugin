@@ -13,7 +13,7 @@ public class Python extends MapRenderer {
     @Override
     public void render(MapView view, MapCanvas canvas, Player player) {
         try {
-            canvas.drawImage(0, 0, ImageIO.read(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator+"test.png")));
+            canvas.drawImage(0, 0, ImageIO.read(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "test.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

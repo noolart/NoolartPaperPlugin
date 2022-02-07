@@ -14,10 +14,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class RandomGeneration implements CommandExecutor {
-
     public NoolartPaperPlugin plugin;
-    static int allmodels=0;
-    static int model_counter=0;
+    static int allmodels = 0;
+    static int model_counter = 0;
 
     public RandomGeneration(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
@@ -28,56 +27,41 @@ public class RandomGeneration implements CommandExecutor {
         if (args.length != 1) {
             return false;
         }
-        int distance =Integer.parseInt(args[0]);
-        allmodels=(int)Math.pow(distance,2);
+
+        int distance = Integer.parseInt(args[0]);
+        allmodels = (int) Math.pow(distance, 2);
         Location h = NoolartPaperPlugin.point1;
         String path;
         File file;
         Scanner scan;
+
         for (int i = 0; i < distance; i++) {
             for (int j = 0; j < distance; j++) {
-
                 try {
                     Random random = new Random();
                     int u = random.nextInt(4);
                     Bukkit.broadcastMessage(Integer.toString(u));
-                    if (u == 5){
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ "model1.csv");
+                    if (u == 5) {
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model1.csv");
+                        file = new File(path);
+                        scan = new Scanner(file);
+                    } else if (u == 6) {
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model2.csv");
+                        file = new File(path);
+                        scan = new Scanner(file);
+                    } else if (u == 7) {
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model3.csv");
+                        file = new File(path);
+                        scan = new Scanner(file);
+                    } else if (u == 8) {
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model4.csv");
+                        file = new File(path);
+                        scan = new Scanner(file);
+                    } else {
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "testbig.csv");
                         file = new File(path);
                         scan = new Scanner(file);
                     }
-                    else if (u == 6){
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ "model2.csv");
-                        file = new File(path);
-                        scan = new Scanner(file);
-                    }
-                    else if (u == 7){
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ "model3.csv");
-                        file = new File(path);
-                        scan = new Scanner(file);
-                    }
-                    else if (u == 8){
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ "model4.csv");
-                        file = new File(path);
-                        scan = new Scanner(file);
-                    }
-                    else{
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ "testbig.csv");
-                        file = new File(path);
-                        scan = new Scanner(file);
-                    }
-
-
-
-
-
-
-
-
-
-
-
-
 
                     String name = sender.getName();
                     Player p = Bukkit.getPlayer(name);
@@ -86,10 +70,6 @@ public class RandomGeneration implements CommandExecutor {
                     int cy1 = (int) h.getY();
                     int cz1 = (int) h.getZ();
                     int o = 0;
-
-
-
-
 
                     String string = scan.nextLine();
                     String[] first_line = string.split(";");
@@ -106,7 +86,7 @@ public class RandomGeneration implements CommandExecutor {
                         String text = "";
                         o++;
                         //Bukkit.broadcastMessage("Part " + o + ", wait");
-                        Bukkit.broadcastMessage("Model "+model_counter+" / "+allmodels);
+                        Bukkit.broadcastMessage("Model " + model_counter + " / " + allmodels);
                         model_counter++;
 
                         int c1 = 0;
@@ -114,23 +94,17 @@ public class RandomGeneration implements CommandExecutor {
                         int c3 = 2;
                         int k = 3;
 
-
-                        for (int r=0;r<=10000;r++) {
+                        for (int r = 0; r <= 10000; r++) {
                             if (scan1.hasNextLine()) {
                                 String string1 = scan1.nextLine();
                                 text = (text + string1);
-                            }
-                            else {
+                            } else {
                                 break;
                             }
                         }
 
-
                         String[] symbols = text.split(";");
                         int scanlength = symbols.length / 4;
-
-
-
 
                         while (scanlength > 0) {
                             String materialName = symbols[k].toUpperCase();
@@ -141,8 +115,6 @@ public class RandomGeneration implements CommandExecutor {
                                 //Not a valid material
                             }
                             World w = p.getWorld();
-
-
 
                             double dx = cx1 + Integer.parseInt(symbols[c1]) - m1;
                             double dy = cy1 + Integer.parseInt(symbols[c2]) - m2;
@@ -156,29 +128,22 @@ public class RandomGeneration implements CommandExecutor {
                             c3 = c3 + 4;
                             k = k + 4;
                             scanlength--;
-
                         }
                     }
                     scan1.close();
 
-
                     Bukkit.broadcastMessage("Done!");
-
                 } catch (IOException e1) {
                     Bukkit.broadcastMessage("File not found!");
                     e1.printStackTrace();
                 }
-                h.setX(h.getX()+16);
 
-
+                h.setX(h.getX() + 16);
             }
-            h.setX(h.getX()-distance*16);
-            h.setZ(h.getZ()+16);
 
+            h.setX(h.getX() - distance * 16);
+            h.setZ(h.getZ() + 16);
         }
-
-
-
 
         return true;
     }

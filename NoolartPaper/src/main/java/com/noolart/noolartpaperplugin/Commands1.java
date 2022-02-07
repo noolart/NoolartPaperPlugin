@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class Commands1 implements CommandExecutor {
-
     private NoolartPaperPlugin plugin;
 
     public Commands1(NoolartPaperPlugin noolartPaperPlugin) {
@@ -26,13 +25,11 @@ public class Commands1 implements CommandExecutor {
         if (args.length != 4) {
             return false;
         }
+
         String filename = args[3];
 
-
-        try {
-            FileOutputStream fileOs = new FileOutputStream( NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".bin", false);
+        try (FileOutputStream fileOs = new FileOutputStream(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".bin", false)) {
             ObjectOutputStream os = new ObjectOutputStream(fileOs);
-
 
             String name = sender.getName();
             Player p = Bukkit.getPlayer(name);
@@ -42,11 +39,9 @@ public class Commands1 implements CommandExecutor {
             int cy = (int) l.getY();
             int cz = (int) l.getZ();
 
-
             int ax = Integer.parseInt(args[0]);
             int ay = Integer.parseInt(args[1]);
             int az = Integer.parseInt(args[2]);
-
 
             for (int i = cx; i < cx + ax; i++) {
                 for (int i1 = cy; i1 < cy + ay; i1++) {
@@ -59,8 +54,8 @@ public class Commands1 implements CommandExecutor {
                     }
                 }
             }
+
             Bukkit.broadcastMessage("Done!");
-            os.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

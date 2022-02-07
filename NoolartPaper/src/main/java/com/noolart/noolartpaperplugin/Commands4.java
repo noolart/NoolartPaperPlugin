@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Commands4 implements CommandExecutor {
-
     private NoolartPaperPlugin plugin;
 
     public Commands4(NoolartPaperPlugin noolartPaperPlugin) {
@@ -29,24 +28,19 @@ public class Commands4 implements CommandExecutor {
 
         try {
             String filename = args[0];
-            int heigth = Integer.parseInt(args[1]);
+            int height = Integer.parseInt(args[1]);
             String path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".csv");
             File file = new File(path);
 
             Scanner scan = new Scanner(file);
 
-
             String name = sender.getName();
             Player p = Bukkit.getPlayer(name);
             Location h = p.getLocation();
             int cx1 = (int) h.getX();
-            int cy1 = (int) h.getY()-heigth;
+            int cy1 = (int) h.getY() - height;
             int cz1 = (int) h.getZ();
             int o = 0;
-
-
-
-
 
             String string = scan.nextLine();
             String[] first_line = string.split(";");
@@ -60,7 +54,7 @@ public class Commands4 implements CommandExecutor {
             Scanner scan1 = new Scanner(file);
 
             while (scan1.hasNextLine()) {
-                String text = "";
+                StringBuilder text = new StringBuilder();
                 o++;
                 Bukkit.broadcastMessage("Part " + o + ", wait");
                 int c1 = 0;
@@ -69,32 +63,29 @@ public class Commands4 implements CommandExecutor {
                 int k = 3;
 
 
-                for (int r=0;r<=10000;r++) {
+                for (int r = 0; r <= 10000; r++) {
                     if (scan1.hasNextLine()) {
                         String string1 = scan1.nextLine();
-                        text = (text + string1);
-                    }
-                    else {
+                        text.append(string1);
+                    } else {
                         break;
                     }
                 }
 
 
-                String[] symbols = text.split(";");
+                String[] symbols = text.toString().split(";");
                 int scanlength = symbols.length / 4;
-
 
                 while (scanlength > 0) {
                     String materialName = symbols[k].toUpperCase();
                     Material theMaterial = null;
+
                     try {
                         theMaterial = Material.valueOf(materialName);
                     } catch (Exception e1) {
                         //Not a valid material
                     }
                     World w = p.getWorld();
-
-
 
                     double dx = cx1 + Integer.parseInt(symbols[c1]) - m1;
                     double dy = cy1 + Integer.parseInt(symbols[c2]) - m2;
@@ -113,9 +104,7 @@ public class Commands4 implements CommandExecutor {
             }
             scan1.close();
 
-
             Bukkit.broadcastMessage("Done!");
-
         } catch (IOException e1) {
             Bukkit.broadcastMessage("File not found!");
             e1.printStackTrace();

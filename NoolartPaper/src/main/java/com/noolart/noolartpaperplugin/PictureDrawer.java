@@ -13,14 +13,13 @@ import org.bukkit.map.MapView;
 import org.bukkit.map.MapView.Scale;
 
 public class PictureDrawer extends MapRenderer {
-
     File picture;
     Scale scale;
     boolean drawed = false;
     int x;
     int y;
 
-    public PictureDrawer(File picture,Scale scale,int x,int y) {
+    public PictureDrawer(File picture, Scale scale, int x, int y) {
         this.picture = picture;
         this.scale = scale;
         this.x = x;
@@ -31,11 +30,15 @@ public class PictureDrawer extends MapRenderer {
     public void render(MapView map, MapCanvas canvas, Player p) {
         if (drawed) return;
         BufferedImage img = null;
+
         try {
             img = ImageIO.read(picture);
-        } catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         map.setScale(scale);
-        canvas.drawImage(x,y, img);
+        canvas.drawImage(x, y, img);
         drawed = true;
     }
 

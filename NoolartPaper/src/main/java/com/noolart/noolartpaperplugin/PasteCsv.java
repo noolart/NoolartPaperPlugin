@@ -13,26 +13,20 @@ import java.io.*;
 import java.util.Scanner;
 
 public class PasteCsv implements CommandExecutor {
+    public NoolartPaperPlugin plugin;
 
-
-    public static void paste(String name, Player p){
+    public static void paste(String filename, Player p) {
         try {
-            String filename = name;
-            String path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ filename + ".csv");
+            String path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + filename + ".csv");
             File file = new File(path);
 
             Scanner scan = new Scanner(file);
-
 
             Location h = NoolartPaperPlugin.point1;
             int cx1 = (int) h.getX();
             int cy1 = (int) h.getY();
             int cz1 = (int) h.getZ();
             int o = 0;
-
-
-
-
 
             String string = scan.nextLine();
             String[] first_line = string.split(";");
@@ -51,29 +45,22 @@ public class PasteCsv implements CommandExecutor {
 
                 Bukkit.broadcastMessage("Part " + o + ", wait");
 
-
                 int c1 = 0;
                 int c2 = 1;
                 int c3 = 2;
                 int k = 3;
 
-
-                for (int r=0;r<=10000;r++) {
+                for (int r = 0; r <= 10000; r++) {
                     if (scan1.hasNextLine()) {
                         String string1 = scan1.nextLine();
                         text = (text + string1);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
 
-
-
                 String[] symbols = text.split(";");
                 int scanlength = symbols.length / 4;
-
-
 
                 while (scanlength > 0) {
                     String materialName = symbols[k].toUpperCase();
@@ -83,10 +70,6 @@ public class PasteCsv implements CommandExecutor {
                     } catch (Exception e1) {
                         //Not a valid material
                     }
-
-
-
-
 
                     double dx = cx1 + Integer.parseInt(symbols[c1]) - m1;
                     double dy = cy1 + Integer.parseInt(symbols[c2]) - m2;
@@ -107,34 +90,26 @@ public class PasteCsv implements CommandExecutor {
             }
             scan1.close();
 
-
-
             Bukkit.broadcastMessage("Done!");
-
-
         } catch (IOException e1) {
             Bukkit.broadcastMessage("File not found!");
             e1.printStackTrace();
         }
     }
-    public static void pasteQuiet(String name, Player p){
+
+    public static void pasteQuiet(String name, Player p) {
         try {
             String filename = name;
-            String path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"mccsv\\"+ filename + ".csv");
+            String path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + filename + ".csv");
             File file = new File(path);
 
             Scanner scan = new Scanner(file);
-
 
             Location h = NoolartPaperPlugin.point1;
             int cx1 = (int) h.getX();
             int cy1 = (int) h.getY();
             int cz1 = (int) h.getZ();
             int o = 0;
-
-
-
-
 
             String string = scan.nextLine();
             String[] first_line = string.split(";");
@@ -151,34 +126,25 @@ public class PasteCsv implements CommandExecutor {
                 String text = "";
                 o++;
 
-
-
                 int c1 = 0;
                 int c2 = 1;
                 int c3 = 2;
                 int k = 3;
 
-
-                for (int r=0;r<=1000;r++) {
+                for (int r = 0; r <= 1000; r++) {
                     if (scan1.hasNextLine()) {
                         String string1 = scan1.nextLine();
                         text = (text + string1);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
                 if (scan1.hasNextLine()) {
-                    Bukkit.broadcastMessage("Part "+o+", wait...");
+                    Bukkit.broadcastMessage("Part " + o + ", wait...");
                 }
-
-
-
 
                 String[] symbols = text.split(";");
                 int scanlength = symbols.length / 4;
-
-
 
                 while (scanlength > 0) {
                     String materialName = symbols[k].toUpperCase();
@@ -188,10 +154,6 @@ public class PasteCsv implements CommandExecutor {
                     } catch (Exception e1) {
                         //Not a valid material
                     }
-
-
-
-
 
                     double dx = cx1 + Integer.parseInt(symbols[c1]) - m1;
                     double dy = cy1 + Integer.parseInt(symbols[c2]) - m2;
@@ -207,13 +169,10 @@ public class PasteCsv implements CommandExecutor {
                     c3 = c3 + 4;
                     k = k + 4;
                     scanlength--;
-
                 }
             }
+
             scan1.close();
-
-
-
         } catch (IOException e1) {
             Bukkit.broadcastMessage("File not found!");
             e1.printStackTrace();
@@ -221,27 +180,21 @@ public class PasteCsv implements CommandExecutor {
     }
 
 
-    public static void pasteImage(String name, Player p, int width, int heigth) {
+    public static void pasteImage(String filename, Player p, int width, int heigth) {
         try {
-            int o = 0;
-            String filename = name;
             String path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + filename + ".csv");
             File file = new File(path);
 
-
-            Location h = NoolartPaperPlugin.point1;
-
             Scanner scan = new Scanner(file);
 
-            String text = "";
+            StringBuilder text = new StringBuilder();
             while (scan.hasNextLine()) {
-                text += scan.nextLine();
-
+                text.append(scan.nextLine());
             }
+
             scan.close();
 
-
-            String[] symbols = text.split(";");
+            String[] symbols = text.toString().split(";");
             int k = 0;
             Location loc = new Location(NoolartPaperPlugin.point1.getWorld(), NoolartPaperPlugin.point1.getX(), NoolartPaperPlugin.point1.getY(), NoolartPaperPlugin.point1.getZ());
 
@@ -251,24 +204,16 @@ public class PasteCsv implements CommandExecutor {
                     k++;
                     loc.add(0, 0, 1);
                 }
+
                 loc.add(1, 0, -heigth);
-
             }
-
 
             Bukkit.broadcastMessage("Done!");
 
-
-
-
-            } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
-
-    public NoolartPaperPlugin plugin;
 
     public PasteCsv(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
@@ -280,10 +225,7 @@ public class PasteCsv implements CommandExecutor {
 
             return false;
         }
-        paste(args[0],Bukkit.getPlayer(sender.getName()));
-
-
-
+        paste(args[0], Bukkit.getPlayer(sender.getName()));
 
         return true;
     }

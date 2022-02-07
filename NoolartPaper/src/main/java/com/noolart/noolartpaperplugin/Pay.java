@@ -15,12 +15,11 @@ import java.util.Scanner;
 
 
 public class Pay implements CommandExecutor {
-
     private NoolartPaperPlugin plugin;
+
     public Pay(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
     }
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -36,16 +35,18 @@ public class Pay implements CommandExecutor {
             Scanner scan = new Scanner(balanceCheck);
             balance = Integer.parseInt(scan.nextLine());
             balance+=Integer.parseInt(args[0]);
+
             p.sendMessage(ChatColor.GOLD+"Баланс пополнен на " +ChatColor.BOLD+ChatColor.LIGHT_PURPLE+args[0]+"$ "+ ChatColor.RESET+ ChatColor.GOLD+ "Ваш баланс: "+ ChatColor.BOLD+ChatColor.LIGHT_PURPLE +balance+"$");
+
             scan.close();
+
             FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator+"users"+File.separator  + sender.getName() +"_balance.csv", false);
             writer.write(Integer.toString(balance));
             writer.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return true;
     }
 }

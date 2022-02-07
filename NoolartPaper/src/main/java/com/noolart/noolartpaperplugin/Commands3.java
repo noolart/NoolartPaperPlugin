@@ -13,11 +13,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Commands3 implements CommandExecutor {
-
     private NoolartPaperPlugin plugin;
 
     public Commands3(NoolartPaperPlugin noolartPaperPlugin) {
-        this.plugin =  plugin;
+        this.plugin = plugin;
     }
 
     @Override
@@ -27,7 +26,7 @@ public class Commands3 implements CommandExecutor {
         }
 
         String filename = args[3];
-        try (FileWriter writer = new FileWriter(  NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".csv", false)) {
+        try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".csv", false)) {
             String name = sender.getName();
             Player p = Bukkit.getPlayer(name);
             Location l = p.getLocation();
@@ -40,7 +39,6 @@ public class Commands3 implements CommandExecutor {
             int ay = Integer.parseInt(args[1]);
             int az = Integer.parseInt(args[2]);
 
-
             for (int i = cx; i < cx + ax; i++) {
                 for (int i1 = cy; i1 < cy + ay; i1++) {
                     for (int i2 = cz; i2 < cz + az; i2++) {
@@ -51,6 +49,7 @@ public class Commands3 implements CommandExecutor {
                     }
                 }
             }
+
             Bukkit.broadcastMessage("Done!");
             writer.flush();
         } catch (IOException ex) {

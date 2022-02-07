@@ -59,11 +59,10 @@ public class Materials {
         return data;
     }
 
-    public static void setValue(String material, String dataname, String value){
-        YML.set(material+"."+dataname,value);
+    public static void setValue(String material, String dataname, String value) {
+        YML.set(material + "." + dataname, value);
         YML = YamlConfiguration.loadConfiguration(file);
     }
-
 
     public static Set<String> getKeys(String material) {
         if (!YML.contains(material)) return new HashSet<>();
