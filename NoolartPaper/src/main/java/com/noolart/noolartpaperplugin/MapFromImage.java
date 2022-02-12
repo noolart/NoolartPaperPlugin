@@ -1,5 +1,6 @@
 package com.noolart.noolartpaperplugin;
 
+import com.noolart.noolartpaperplugin.csv.PasteCsv;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -10,7 +11,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class MapFromImage implements CommandExecutor {
