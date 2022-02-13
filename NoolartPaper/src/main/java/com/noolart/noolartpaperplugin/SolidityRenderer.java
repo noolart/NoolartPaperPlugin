@@ -17,7 +17,5 @@ public class SolidityRenderer extends MapRenderer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        ?работа
     }
 }
