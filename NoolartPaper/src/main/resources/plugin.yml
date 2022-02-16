@@ -55,6 +55,9 @@ commands:
   chest:
     description: Секретная команда
     usage: /chest <material>
+  perlingeneration:
+    description: Генерирует реалистичную поверхность
+    usage: /perlingeneration <x-width> <z-width> <scale> <seed> <koef-height>
 
 
 
