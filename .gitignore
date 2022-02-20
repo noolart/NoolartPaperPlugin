@@ -1,4 +1,7 @@
 .idea
 NoolartPaper/target**
 *.iml
+NoolartPaper/bin*
+*.DS_Store
+*META-INF*
 *out/*

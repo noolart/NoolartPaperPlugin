@@ -75,7 +75,7 @@ public class RandomGenerationUseCommand implements CommandExecutor {
         universal_counter = 0;
 
         for (String model : models) {
-            File path = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + model + ".csv");
+            File path = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + model + ".csv");
             try {
                 directories[universal_counter] = new Scanner(path);
                 dir[universal_counter] = path;

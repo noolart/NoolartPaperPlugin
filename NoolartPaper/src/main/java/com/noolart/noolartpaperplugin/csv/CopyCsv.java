@@ -26,7 +26,7 @@ public class CopyCsv implements CommandExecutor {
         String filename = args[0];
 
         try {
-            try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + filename + ".csv", false)) {
+            try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + filename + ".csv", false)) {
                 String name = sender.getName();
                 Player p = Bukkit.getPlayer(name);
 

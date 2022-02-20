@@ -1,6 +1,5 @@
 package com.noolart.noolartpaperplugin.commands;
 
-
 import com.noolart.noolartpaperplugin.NoolartPaperPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,8 +27,7 @@ public class Commands implements CommandExecutor {
             e.printStackTrace();
         }
     }
-
-
+    
     public Commands(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
     }
@@ -44,29 +42,3 @@ public class Commands implements CommandExecutor {
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

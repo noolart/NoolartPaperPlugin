@@ -24,7 +24,7 @@ public class GenerationFromCsv implements CommandExecutor {
 
         try {
             String filename = args[0];
-            Scanner scan = new Scanner(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + filename + ".csv"));
+            Scanner scan = new Scanner(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + filename + ".csv"));
             Bukkit.broadcastMessage("File is opened. Please wait...");
 
             StringBuilder text = new StringBuilder();

@@ -35,7 +35,7 @@ public class MapFromImage implements CommandExecutor {
 
         try {
             Bukkit.broadcastMessage("loading...");
-            BufferedImage img = ImageIO.read(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "imgs\\" + filename + ".png"));
+            BufferedImage img = ImageIO.read(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "imgs" + File.separator + filename + ".png"));
 
             float[][] colorHues = {{-1, 0.5f}, {-0.5f, 0}, {0, 20}, {20, 40}, {40, 60}, {80, 120}, {120, 160}, {160, 200}, {200, 230}, {230, 260}, {260, 280}, {280, 310}, {310, 340}, {340, 360}, {361, 362}};
 

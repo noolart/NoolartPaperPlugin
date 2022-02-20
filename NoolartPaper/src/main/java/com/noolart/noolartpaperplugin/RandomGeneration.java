@@ -42,23 +42,23 @@ public class RandomGeneration implements CommandExecutor {
                     int u = random.nextInt(4);
                     Bukkit.broadcastMessage(Integer.toString(u));
                     if (u == 5) {
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model1.csv");
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + "model1.csv");
                         file = new File(path);
                         scan = new Scanner(file);
                     } else if (u == 6) {
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model2.csv");
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + "model2.csv");
                         file = new File(path);
                         scan = new Scanner(file);
                     } else if (u == 7) {
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model3.csv");
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + "model3.csv");
                         file = new File(path);
                         scan = new Scanner(file);
                     } else if (u == 8) {
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "model4.csv");
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + "model4.csv");
                         file = new File(path);
                         scan = new Scanner(file);
                     } else {
-                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv\\" + "testbig.csv");
+                        path = (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + "testbig.csv");
                         file = new File(path);
                         scan = new Scanner(file);
                     }
