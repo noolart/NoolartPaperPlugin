@@ -36,20 +36,29 @@ public class PerlinGeneration implements CommandExecutor {
         int[][] mapToSort = MyMap.map.clone();
         for (int i = 0; i < mapToSort.length; i++) {
             Arrays.sort(mapToSort[i]);
-            if(mapToSort[i][mapToSort[0].length-1]>height){
-                height=mapToSort[i][mapToSort[0].length-1];
-            }
+            //возвращение в плоский слои
+//            if(mapToSort[i][mapToSort[0].length-1]>height){
+//                height=mapToSort[i][mapToSort[0].length-1];
+//            }
             if(mapToSort[i][0]<height0){
                 height0=mapToSort[i][0];
             }
         }
-        Bukkit.broadcastMessage(height0+" "+height);
-        height-=height0;
+
+        //height-=height0;
+        Random r = new Random();
 
 
         Location loc =  NoolartPaperPlugin.point1;
         for (int i = 0; i < myMap.map.length ; i++) {
             for (int j = 0; j < myMap.map.length ; j++) {
+
+
+                //убрать при возвращении к плоским слоям
+                    height = MyMap.map[i][j];
+                    height-=height0;
+
+
                 Bukkit.broadcastMessage( height0/Integer.parseInt(args[4])+" "+ myMap.map[i][j]/ Integer.parseInt(args[4])+"");
                 for (int k = (height0/Integer.parseInt(args[4])); k < (myMap.map[i][j]/ Integer.parseInt(args[4])+1); k++) {
 
@@ -57,15 +66,46 @@ public class PerlinGeneration implements CommandExecutor {
                     loc.add(0, 1, 0);
                     Bukkit.broadcastMessage(k+"");
 
-                    if (k - height0 >= height * 0.9) {
+                    if (k - height0/Integer.parseInt(args[4]) > height * 0.9) {
                         loc.getBlock().setType(Material.SNOW_BLOCK);
-                    } else if (k - height0 >= height * 0.6) {
+                    }
+                    else if (k - height0/Integer.parseInt(args[4]) == height * 0.9) {
+                        if(r.nextInt(2)==1) {
+                            loc.getBlock().setType(Material.SNOW_BLOCK);
+                        }
+                        else{
+                            loc.getBlock().setType(Material.STONE);
+                        }
+                    }
+
+                    else if (k - height0/Integer.parseInt(args[4]) > height/Integer.parseInt(args[4]) * 0.6) {
                         loc.getBlock().setType(Material.STONE);
-                    } else if (k - height0 >= height * 0.4) {
-                        loc.getBlock().setType(Material.DIRT);
-                    } else if (k - height0 >= height * 0.3) {
+                    }
+                    else if (k - height0/Integer.parseInt(args[4]) == height * 0.6) {
+                        if (r.nextInt(2) == 1) {
+                            loc.getBlock().setType(Material.STONE);
+                        } else {
+                            loc.getBlock().setType(Material.DIRT);
+                        }
+                    }
+                    else if (k - height0/Integer.parseInt(args[4]) > height/Integer.parseInt(args[4]) * 0.4) {
+
+                        if (k - height0 / Integer.parseInt(args[4])-1 <= height / Integer.parseInt(args[4]) * 0.4) {
+                            if (r.nextInt(2) == 1) {
+                                loc.getBlock().setType(Material.DIRT);
+                            } else {
+                                loc.getBlock().setType(Material.SANDSTONE);
+                            }
+                        }
+                        else{
+                            loc.getBlock().setType(Material.DIRT);
+                        }
+                    }
+
+
+                    else if (k - height0/Integer.parseInt(args[4]) >= height/Integer.parseInt(args[4]) * 0.3) {
                         loc.getBlock().setType(Material.SANDSTONE);
-                    } else if (k - height0 >= height * 0.1){
+                    } else if (k - height0/Integer.parseInt(args[4]) >= height/Integer.parseInt(args[4]) * 0.1){
                         loc.getBlock().setType(Material.WATER);
                     }
                     else{
