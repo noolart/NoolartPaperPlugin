@@ -30,7 +30,7 @@ public class PasteCsv implements CommandExecutor {
         CsvParser parser = new CsvParser(settings);
 
         File file = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + filename + ".csv");
-        long start = System.nanoTime();
+        long start = System.currentTimeMillis();
         try {
             parser.beginParsing(file);
 
@@ -67,9 +67,9 @@ public class PasteCsv implements CommandExecutor {
             parser.stopParsing();
         }
 
-        long finish = System.nanoTime();
+        long finish = System.currentTimeMillis();
         long elapsed = finish - start;
-        Bukkit.broadcastMessage("вставка модели заняла: " + elapsed);
+        Bukkit.broadcastMessage("вставка модели заняла: " + elapsed + "миллисекунд");
     }
 
     public static void pasteQuiet(String name, Player p) {
