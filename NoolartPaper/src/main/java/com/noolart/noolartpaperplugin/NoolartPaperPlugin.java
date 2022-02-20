@@ -118,6 +118,7 @@ public class NoolartPaperPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("balance")).setExecutor(new Balance(this));
         Objects.requireNonNull(getCommand("pay")).setExecutor(new Pay(this));
         Objects.requireNonNull(getCommand("chest")).setExecutor(new ChestHack(this));
+        Objects.requireNonNull(getCommand("perlingeneration")).setExecutor(new PerlinGeneration(this));
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
