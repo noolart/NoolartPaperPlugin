@@ -1,8 +1,9 @@
 .idea
-NoolartPaper/target**
 *.iml
-NoolartPaper/bin*
 *.DS_Store
-*META-INF*
+NoolartPaper/target**
+NoolartPaper/bin*
+NoolartPaper/bin**
 NoolartPaper/out/*
+*META-INF*
 *out/*
