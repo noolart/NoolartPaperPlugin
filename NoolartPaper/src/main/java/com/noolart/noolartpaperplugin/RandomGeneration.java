@@ -15,8 +15,8 @@ import java.util.Scanner;
 
 public class RandomGeneration implements CommandExecutor {
     public NoolartPaperPlugin plugin;
-    static int allmodels = 0;
-    static int model_counter = 0;
+    static int allModels = 0;
+    static int modelCounter = 0;
 
     public RandomGeneration(NoolartPaperPlugin noolartPaperPlugin) {
         this.plugin = noolartPaperPlugin;
@@ -29,7 +29,7 @@ public class RandomGeneration implements CommandExecutor {
         }
 
         int distance = Integer.parseInt(args[0]);
-        allmodels = (int) Math.pow(distance, 2);
+        allModels = (int) Math.pow(distance, 2);
         Location h = NoolartPaperPlugin.point1;
         String path;
         File file;
@@ -86,8 +86,8 @@ public class RandomGeneration implements CommandExecutor {
                         String text = "";
                         o++;
                         //Bukkit.broadcastMessage("Part " + o + ", wait");
-                        Bukkit.broadcastMessage("Model " + model_counter + " / " + allmodels);
-                        model_counter++;
+                        Bukkit.broadcastMessage("Model " + modelCounter + " / " + allModels);
+                        modelCounter++;
 
                         int c1 = 0;
                         int c2 = 1;
