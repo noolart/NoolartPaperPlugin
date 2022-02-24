@@ -55,6 +55,8 @@ public class MyListener implements Listener {
         return stack;
     }
 
+
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws FileNotFoundException {
         event.setJoinMessage("" + ChatColor.GOLD + ChatColor.BOLD + "Welcome, " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + event.getPlayer().getName() + "!" + "\n" + ChatColor.GOLD + ChatColor.BOLD + "server by Novosibirsk State University");
@@ -212,6 +214,37 @@ public class MyListener implements Listener {
         if (a == Action.RIGHT_CLICK_BLOCK) {
             Player player = e.getPlayer();
             ItemStack itemStack = player.getItemInHand();
+            Random r = new Random();
+
+
+//            if (e.getClickedBlock().getType()==Material.SPONGE  &&  e.getItem().getType()==Material.PAPER){
+//
+//
+//                Location loc = e.getClickedBlock().getLocation();
+//                int count = Integer.parseInt(e.getItem().getLore().get(0));
+//                for (int j = 0; j < count; j++) {
+//                    loc.add(0,1,0);
+//                    loc.getBlock().setType(Material.DIAMOND_BLOCK);
+//                }
+//
+//            }
+//
+//            if (e.getClickedBlock().getType()==Material.DIAMOND_BLOCK  &&  e.getItem().getType()==Material.PAPER){
+//                Random rand = new Random();
+//                ItemStack item = new ItemStack(Material.PAPER);
+//                ItemMeta im = item.getItemMeta();
+//                im.setLore(Collections.singletonList(Integer.toString(rand.nextInt(10))));
+//                item.setItemMeta(im);
+//                e.getPlayer().getInventory().addItem(item);
+//            }
+
+
+
+
+
+
+
+
 
             if (itemStack.getType() == Material.WOODEN_SWORD) {
                 NoolartPaperPlugin.point2 = e.getClickedBlock().getLocation();

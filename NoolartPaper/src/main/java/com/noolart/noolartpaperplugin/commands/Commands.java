@@ -9,13 +9,17 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.io.*;
+import java.util.Random;
 
 public class Commands implements CommandExecutor {
     private NoolartPaperPlugin plugin;
 
+
     public static void pythonrun(String filename) {
+
         try {
-            Process p = Runtime.getRuntime().exec("python " + NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".py 1 2");
+
+            Process p = Runtime.getRuntime().exec("python " + NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".py " + "--id=");
             BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String s;
@@ -25,7 +29,7 @@ public class Commands implements CommandExecutor {
 
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();
+           Bukkit.broadcastMessage(e.toString());
         }
     }
 
