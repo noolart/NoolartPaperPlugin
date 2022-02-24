@@ -2,3 +2,5 @@
 NoolartPaper/target**
 *.iml
 *out/*
+*.DS_Store
+NoolartPaper/bin**

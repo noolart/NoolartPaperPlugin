@@ -23,6 +23,8 @@ public class PasteCsv implements CommandExecutor {
 
             Scanner scan = new Scanner(file);
 
+            long start = System.currentTimeMillis();
+
             Location h = NoolartPaperPlugin.point1;
             int cx1 = (int) h.getX();
             int cy1 = (int) h.getY();
@@ -92,6 +94,10 @@ public class PasteCsv implements CommandExecutor {
             scan1.close();
 
             Bukkit.broadcastMessage("Done!");
+            long finish = System.currentTimeMillis();
+            long elapsed = finish - start;
+            Bukkit.broadcastMessage("вставка модели заняла: " + elapsed + "миллисекунд");
+
         } catch (IOException e1) {
             Bukkit.broadcastMessage("File not found!");
             e1.printStackTrace();

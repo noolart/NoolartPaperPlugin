@@ -34,11 +34,11 @@ public class RandomGenerationUseCommand implements CommandExecutor {
     }
 
     public String printAtrArr(String[] arr) {
-        String result = "";
-        for (int i = 0; i < arr.length; i++) {
-            result = result + arr[i] + " ";
+        StringBuilder result = new StringBuilder();
+        for (String s : arr) {
+            result.append(s).append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     @Override
