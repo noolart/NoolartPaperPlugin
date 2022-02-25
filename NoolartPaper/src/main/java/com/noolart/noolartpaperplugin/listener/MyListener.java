@@ -264,9 +264,9 @@ public class MyListener implements Listener {
             }
 
             if(e.getClickedBlock().getType() == Material.PINK_WOOL && player.getItemInHand().getType() == Material.PAPER) {
-                Location loc = e.getClickedBlock().getLocation();
-                if(!loc.getNearbyEntities(6, 6, 6).isEmpty()) {
-                    for (Entity entity : loc.getNearbyEntities(6, 6, 6)) {
+                Location loc = e.getClickedBlock().getLocation().add(-1, 2, -1);
+                if(!loc.getNearbyEntities(2, 2, 2).isEmpty()) {
+                    for (Entity entity : loc.getNearbyEntities(2, 2, 2)) {
                         try {
                             entity.remove();
                         } catch (UnsupportedOperationException unsupportedOperationException) {
