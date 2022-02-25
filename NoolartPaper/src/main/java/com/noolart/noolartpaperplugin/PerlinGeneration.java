@@ -5,6 +5,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Random;
 
+import com.noolart.noolartpaperplugin.util.Vector2D;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -190,16 +191,16 @@ class Perlin2D {
         float localY = y - top;
 
         // извлекаем градиентные векторы для всех вершин квадрата:
-        Vector topLeftGradient = getPseudoRandomGradientVector(left, top);
-        Vector topRightGradient = getPseudoRandomGradientVector(left + 1, top);
-        Vector bottomLeftGradient = getPseudoRandomGradientVector(left, top + 1);
-        Vector bottomRightGradient = getPseudoRandomGradientVector(left + 1, top + 1);
+        Vector2D topLeftGradient = getPseudoRandomGradientVector(left, top);
+        Vector2D topRightGradient = getPseudoRandomGradientVector(left + 1, top);
+        Vector2D bottomLeftGradient = getPseudoRandomGradientVector(left, top + 1);
+        Vector2D bottomRightGradient = getPseudoRandomGradientVector(left + 1, top + 1);
 
         // вектора от вершин квадрата до точки внутри квадрата:
-        Vector distanceToTopLeft = new Vector(localX, localY);
-        Vector distanceToTopRight = new Vector(localX - 1, localY);
-        Vector distanceToBottomLeft = new Vector(localX, localY - 1);
-        Vector distanceToBottomRight = new Vector(localX - 1, localY - 1);
+        Vector2D distanceToTopLeft = new Vector2D(localX, localY);
+        Vector2D distanceToTopRight = new Vector2D(localX - 1, localY);
+        Vector2D distanceToBottomLeft = new Vector2D(localX, localY - 1);
+        Vector2D distanceToBottomRight = new Vector2D(localX - 1, localY - 1);
 
         // считаем скалярные произведения между которыми будем интерполировать
         float tx1 = dot(distanceToTopLeft, topLeftGradient);
@@ -219,42 +220,29 @@ class Perlin2D {
         return a + (b - a) * t;
     }
 
-    private float dot(Vector a, Vector b) {
-        return a.x * b.x + a.y * b.y;
+    private float dot(Vector2D a, Vector2D b) {
+        return a.getX() * b.getX() + a.getY() * b.getY();
     }
 
     private float qunticCurve(float t) {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    private Vector getPseudoRandomGradientVector(int x, int y) {
+    private Vector2D getPseudoRandomGradientVector(int x, int y) {
         // псевдо-случайное число от 0 до 3 которое всегда неизменно при данных x и y
         int v = (int) (((x * 1836311903L) ^ (y * 2971215073L) + 4807526976L) & 1023L);
         v = permutationTable[v] & 3;
 
         switch (v) {
             case 0:
-                return new Vector(1, 0);
+                return new Vector2D(1, 0);
             case 1:
-                return new Vector(-1, 0);
+                return new Vector2D(-1, 0);
             case 2:
-                return new Vector(0, 1);
+                return new Vector2D(0, 1);
             default:
-                return new Vector(0, -1);
+                return new Vector2D(0, -1);
         }
     }
-
-
-    private static class Vector {
-        float x;
-        float y;
-
-        Vector(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
-
-    }
-
 }
 
