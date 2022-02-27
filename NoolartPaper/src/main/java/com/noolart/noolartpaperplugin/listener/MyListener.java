@@ -115,10 +115,10 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent e) throws IOException {
-        Action a = e.getAction();
-        if (a == Action.RIGHT_CLICK_AIR) {
-            Player p = e.getPlayer();
+    public void interact(PlayerInteractEvent event) throws IOException {
+        Action action = event.getAction();
+        if (action == Action.RIGHT_CLICK_AIR) {
+            Player p = event.getPlayer();
             ItemStack item = p.getItemInHand();
             if (item.getType() == Material.DIAMOND_HOE) {
                 try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "notes.csv", false)) {
@@ -147,8 +147,8 @@ public class MyListener implements Listener {
             }
         }//if
 
-        if (a == Action.RIGHT_CLICK_AIR) {
-            Player p = e.getPlayer();
+        if (action == Action.RIGHT_CLICK_AIR) {
+            Player p = event.getPlayer();
             ItemStack item = p.getItemInHand();
             if (item.getType() == Material.NETHERITE_HOE) {
                 p.sendMessage("LLS");
@@ -202,14 +202,14 @@ public class MyListener implements Listener {
             }
         }
 
-        if (a == Action.LEFT_CLICK_BLOCK) {
-            Player player = e.getPlayer();
+        if (action == Action.LEFT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
             ItemStack itemStack = player.getItemInHand();
             if (itemStack.getType() == Material.WOODEN_SWORD) {
-                NoolartPaperPlugin.point1 = Objects.requireNonNull(e.getClickedBlock()).getLocation();
-                double x = e.getClickedBlock().getLocation().getX();
-                double y = e.getClickedBlock().getLocation().getY();
-                double z = e.getClickedBlock().getLocation().getZ();
+                NoolartPaperPlugin.point1 = Objects.requireNonNull(event.getClickedBlock()).getLocation();
+                double x = event.getClickedBlock().getLocation().getX();
+                double y = event.getClickedBlock().getLocation().getY();
+                double z = event.getClickedBlock().getLocation().getZ();
 
                 Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
                 Objective obj = board.registerNewObjective("prefixofuser", "dummy");
@@ -226,12 +226,12 @@ public class MyListener implements Listener {
 
 
 
-        if (a == Action.RIGHT_CLICK_BLOCK) {
-            Player player = e.getPlayer();
+        if (action == Action.RIGHT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
             ItemStack itemStack = player.getItemInHand();
 
 
-            if (e.getClickedBlock().getType() == Material.SPONGE && player.getItemInHand().getType() == Material.PAPER) {
+            if (event.getClickedBlock().getType() == Material.SPONGE && player.getItemInHand().getType() == Material.PAPER) {
 
                 if (spongeClickCounter == graphicsNames.length) {
                     spongeClickCounter = 0;
@@ -241,32 +241,33 @@ public class MyListener implements Listener {
                 String paperText = paper.getLore().get(0);
                 int curBaseID = Integer.parseInt(paperText);
 
-                int x = -1;
+                int x = 0;
                 int y = 3;
                 int z = -1;
-                World w = player.getWorld();
-                Block b = e.getClickedBlock();
+                World world = player.getWorld();
+                Block clickedBlock = event.getClickedBlock();
 
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         int finalI = i;
                         int finalJ = j;
-                        w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                        world.spawn(new Location(world, clickedBlock.getX() + x, clickedBlock.getY() + y, clickedBlock.getZ() + z), ItemFrame.class, itemFrame -> {
                             itemFrame.setFacingDirection(BlockFace.NORTH, false);
-                            itemFrame.setItem(mapToStack(curBaseID + graphicsNames[spongeClickCounter] + "-" + finalI + "-" + finalJ + ".jpg", w));
+                            itemFrame.setItem(mapToStack(curBaseID + graphicsNames[spongeClickCounter] + "-" + finalI + "-" + finalJ + ".jpg", world));
                         });
                         x--;
                     }
                     y--;
-                    x = -1;
+                    x = 0;
                 }
                 spongeClickCounter++;
             }
 
-            if(e.getClickedBlock().getType() == Material.PINK_WOOL && player.getItemInHand().getType() == Material.PAPER) {
-                Location loc = e.getClickedBlock().getLocation();
-                if(!loc.getNearbyEntities(6, 6, 6).isEmpty()) {
-                    for (Entity entity : loc.getNearbyEntities(6, 6, 6)) {
+            if(event.getClickedBlock().getType() == Material.PINK_WOOL && player.getItemInHand().getType() == Material.PAPER) {
+                Location screenCenter = event.getClickedBlock().getLocation().add(0, 2, -1);
+
+                if(!screenCenter.getNearbyEntities(2, 2, 2).isEmpty()) {
+                    for (Entity entity : screenCenter.getNearbyEntities(2, 2, 2)) {
                         try {
                             entity.remove();
                         } catch (UnsupportedOperationException unsupportedOperationException) {
@@ -277,10 +278,10 @@ public class MyListener implements Listener {
             }
 
             if (itemStack.getType() == Material.WOODEN_SWORD) {
-                NoolartPaperPlugin.point2 = e.getClickedBlock().getLocation();
-                double x = e.getClickedBlock().getLocation().getX();
-                double y = e.getClickedBlock().getLocation().getY();
-                double z = e.getClickedBlock().getLocation().getZ();
+                NoolartPaperPlugin.point2 = event.getClickedBlock().getLocation();
+                double x = event.getClickedBlock().getLocation().getX();
+                double y = event.getClickedBlock().getLocation().getY();
+                double z = event.getClickedBlock().getLocation().getZ();
 
                 Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
                 Objective obj = board.registerNewObjective("prefixofuser", "dummy");
@@ -296,11 +297,11 @@ public class MyListener implements Listener {
 
             ItemStack i = player.getItemInHand();
 
-            if (e.getClickedBlock().getType() == Material.LECTERN && Materials.getString(i.getType().toString().toLowerCase(), "name") != ""
-                    && finds.get(e.getPlayer().getName()).get(e.getPlayer().getItemInHand().getType().toString().toLowerCase()).equals("false")) {
+            if (event.getClickedBlock().getType() == Material.LECTERN && Materials.getString(i.getType().toString().toLowerCase(), "name") != ""
+                    && finds.get(event.getPlayer().getName()).get(event.getPlayer().getItemInHand().getType().toString().toLowerCase()).equals("false")) {
                 String finded = Materials.getString(i.getType().toString().toLowerCase(), "name");
 
-                Lectern l = (Lectern) e.getClickedBlock().getState();
+                Lectern l = (Lectern) event.getClickedBlock().getState();
                 LecternInventory lecternInventory = (LecternInventory) l.getInventory();
 
                 for (HumanEntity humanEntity : lecternInventory.getViewers()) {
@@ -308,7 +309,7 @@ public class MyListener implements Listener {
                 }
 
 //            e5.getPlayer().playSound(e5.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE,16f,1f);
-                e.getPlayer().getWorld().spawn(e.getClickedBlock().getLocation().add(0.5, 1, 0.5), Firework.class, firework -> {
+                event.getPlayer().getWorld().spawn(event.getClickedBlock().getLocation().add(0.5, 1, 0.5), Firework.class, firework -> {
 
                     FireworkMeta fm = firework.getFireworkMeta();
                     List<Color> c = new ArrayList<Color>();
@@ -324,21 +325,21 @@ public class MyListener implements Listener {
 
                 Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "============================" + "\n" + ChatColor.DARK_GREEN + "Поздравляем, ты нашел " + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + finded.toUpperCase() + ChatColor.RESET + ChatColor.DARK_GREEN + "!" + "\n" + "Теперь характеристи каждого блока типа " + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + finded.toUpperCase() + ChatColor.RESET + ChatColor.DARK_GREEN + " будут показываться на экране при наведении!" + "\n" + ChatColor.LIGHT_PURPLE + "============================");
 //            Materials.setValue(i.getItemStack().getType().toString().toLowerCase(),"finded","true");
-                finds.get(e.getPlayer().getName()).put(i.getType().toString().toLowerCase(), "true");
+                finds.get(event.getPlayer().getName()).put(i.getType().toString().toLowerCase(), "true");
 //            Bukkit.broadcastMessage(i.getItemStack().getType().toString().toLowerCase()+":"+NoolartPaperPlugin.hashMap.get(i.getItemStack().getType().toString().toLowerCase()));
-                FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + e.getPlayer().getName() + ".csv");
+                FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + event.getPlayer().getName() + ".csv");
                 String[] keys = new String[48];
                 String[] values = new String[48];
 
                 int j = 0;
-                for (String key : finds.get(e.getPlayer().getName()).keySet()) {
+                for (String key : finds.get(event.getPlayer().getName()).keySet()) {
                     keys[j] = key;
                     j++;
                 }
 
                 j = 0;
 
-                for (String value : finds.get(e.getPlayer().getName()).values()) {
+                for (String value : finds.get(event.getPlayer().getName()).values()) {
                     values[j] = value;
                     j++;
                 }
@@ -352,7 +353,7 @@ public class MyListener implements Listener {
                 writer.close();
             }
 
-            if(e.getClickedBlock().getType() == Material.POLISHED_BLACKSTONE) {
+            if(event.getClickedBlock().getType() == Material.POLISHED_BLACKSTONE) {
                 ItemStack paperWithBaseId = new ItemStack(Material.PAPER);
                 ItemMeta paperMeta = paperWithBaseId.getItemMeta();
                 paperMeta.setLore(Arrays.asList(Integer.toString(baseID)));
@@ -374,17 +375,17 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void interact(BlockPlaceEvent blockPlaceEvent) throws IOException {
-        Block b = blockPlaceEvent.getBlock();
-        BlockState blockState = b.getState();
+        Block block = blockPlaceEvent.getBlock();
+        BlockState blockState = block.getState();
 
-        if (b.getType() == Material.LECTERN) {
+        if (block.getType() == Material.LECTERN) {
             if (blockState instanceof Lectern) {
                 Lectern l = (Lectern) blockState;
                 ItemStack itemStack = new ItemStack(Material.WRITTEN_BOOK);
                 l.getInventory().addItem(itemStack);
             }
 
-            blockPlaceEvent.getPlayer().getWorld().spawn(b.getLocation().add(0.5, -0.8, 0.5), ArmorStand.class, armorStand -> {
+            blockPlaceEvent.getPlayer().getWorld().spawn(block.getLocation().add(0.5, -0.8, 0.5), ArmorStand.class, armorStand -> {
                 armorStand.setVisible(false);
                 armorStand.setCustomName(ChatColor.DARK_PURPLE + "Изучить");
                 armorStand.setCustomNameVisible(true);
@@ -396,9 +397,9 @@ public class MyListener implements Listener {
 
 //        String path = NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "observers.csv";
 
-        if (b.getType() == Material.OBSERVER) {
+        if (block.getType() == Material.OBSERVER) {
             try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "observers.csv", true)) {
-                writer.write(b.getX() + ";" + b.getY() + ";" + b.getZ() + ";" + "\n");
+                writer.write(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + "\n");
                 blockPlaceEvent.getPlayer().sendMessage(ChatColor.GOLD + "Observer have been placed!");
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -406,7 +407,7 @@ public class MyListener implements Listener {
 
             Commands.pythonrun("graphic", null);
             World w = blockPlaceEvent.getPlayer().getWorld();
-            w.spawn(new Location(w, b.getX(), b.getY() + 1, b.getZ()), ItemFrame.class, itemFrame -> {
+            w.spawn(new Location(w, block.getX(), block.getY() + 1, block.getZ()), ItemFrame.class, itemFrame -> {
                 itemFrame.setFacingDirection(BlockFace.UP, false);
                 itemFrame.setItem(mapToStack("test.png", w));
                 itemFrame.setItemDropChance(0f);
@@ -415,12 +416,12 @@ public class MyListener implements Listener {
 //            e1.getPlayer().getInventory().addItem(mapToStack("test.png",e1.getPlayer().getWorld()));
         }
 
-        if (b.getType() == Material.DARK_OAK_FENCE) {
-            NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), b.getLocation().getX() - 3, b.getLocation().getY(), b.getLocation().getZ() - 3);
+        if (block.getType() == Material.DARK_OAK_FENCE) {
+            NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
             PasteCsv.paste("OilRid", blockPlaceEvent.getPlayer());
 
-            NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), b.getLocation().getX() - 2, 1, b.getLocation().getZ() - 2);
-            double depth = b.getLocation().getY() - 1;
+            NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 2, 1, block.getLocation().getZ() - 2);
+            double depth = block.getLocation().getY() - 1;
             Location loc = new Location(blockPlaceEvent.getPlayer().getWorld(), NoolartPaperPlugin.point1.getX(), 1, NoolartPaperPlugin.point1.getZ());
 
             for (int i = 0; i < depth; i++) {
@@ -442,7 +443,7 @@ public class MyListener implements Listener {
         }
 
 
-        if (b.getType() == Material.IRON_BARS) {
+        if (block.getType() == Material.IRON_BARS) {
             blockPlaceEvent.getPlayer().sendMessage("wait...");
 
             File solidity = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Density.csv");
@@ -472,7 +473,7 @@ public class MyListener implements Listener {
 
 
 
-            NoolartPaperPlugin.point1 = b.getLocation().clone().add(-5, -1, -5);
+            NoolartPaperPlugin.point1 = block.getLocation().clone().add(-5, -1, -5);
             PasteCsv.pasteQuiet("budka", blockPlaceEvent.getPlayer());
             blockPlaceEvent.getBlock().getLocation().add(0, 1, -4).getBlock().setType(Material.CHEST);
 
@@ -483,9 +484,9 @@ public class MyListener implements Listener {
             Player p = blockPlaceEvent.getPlayer();
             World w = p.getWorld();
 
-            NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), b.getLocation().getX() - 2, 1, b.getLocation().getZ() - 2);
-            double depth = b.getLocation().getY() - 1;
-            Location loc = new Location(blockPlaceEvent.getPlayer().getWorld(), b.getX(), 1, b.getZ());
+            NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 2, 1, block.getLocation().getZ() - 2);
+            double depth = block.getLocation().getY() - 1;
+            Location loc = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getX(), 1, block.getZ());
 
             for (int i = 0; i < depth - 1; i++) {
                 try (FileWriter writer = new FileWriter(solidity.getPath(), true)) {
@@ -527,9 +528,9 @@ public class MyListener implements Listener {
                 //Bukkit.broadcastMessage(Double.toString(loc.getX())+" "+ Double.toString(loc.getY())+" "+Double.toString(loc.getZ())+Materials);
             }
 
-            NoolartPaperPlugin.point1 = new Location(w, b.getLocation().getX(), b.getLocation().getY() + 2, b.getLocation().getZ());
+            NoolartPaperPlugin.point1 = new Location(w, block.getLocation().getX(), block.getLocation().getY() + 2, block.getLocation().getZ());
 
-            for (int i = (int) b.getLocation().getY() + 2; i > 0; i--) {
+            for (int i = (int) block.getLocation().getY() + 2; i > 0; i--) {
                 NoolartPaperPlugin.point1.getBlock().setType(Material.END_ROD);
                 NoolartPaperPlugin.point1.setY(NoolartPaperPlugin.point1.getY() - 1);
             }
@@ -562,7 +563,7 @@ public class MyListener implements Listener {
                 for (int j = 0; j < 3; j++) {
                     int finalI = i;
                     int finalJ = j;
-                    w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                    w.spawn(new Location(w, block.getX() + x, block.getY() + y, block.getZ() + z), ItemFrame.class, itemFrame -> {
                         itemFrame.setFacingDirection(BlockFace.EAST, false);
                         itemFrame.setItem(mapToStack(baseID + "Density" + "-" + (finalI) + "-" + finalJ + ".jpg", p.getWorld()));
                     });
@@ -579,7 +580,7 @@ public class MyListener implements Listener {
                 for (int j = 0; j < 3; j++) {
                     int finalI = i;
                     int finalJ = j;
-                    w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                    w.spawn(new Location(w, block.getX() + x, block.getY() + y, block.getZ() + z), ItemFrame.class, itemFrame -> {
                         itemFrame.setFacingDirection(BlockFace.EAST, false);
                         itemFrame.setItem(mapToStack(baseID + "Magnetic" + "-" + (finalI) + "-" + finalJ + ".jpg", p.getWorld()));
 //                        Bukkit.broadcastMessage("magnetic"+"-"+(finalI)+"-"+ finalJ+".png");
@@ -598,7 +599,7 @@ public class MyListener implements Listener {
                 for (int j = 0; j < 3; j++) {
                     int finalI = i;
                     int finalJ = j;
-                    w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                    w.spawn(new Location(w, block.getX() + x, block.getY() + y, block.getZ() + z), ItemFrame.class, itemFrame -> {
                         itemFrame.setFacingDirection(BlockFace.SOUTH, false);
                         itemFrame.setItem(mapToStack(baseID + "Res" + "-" + (finalI) + "-" + finalJ + ".jpg", p.getWorld()));
                     });
@@ -617,7 +618,7 @@ public class MyListener implements Listener {
                 for (int j = 0; j < 3; j++) {
                     int finalI = i;
                     int finalJ = j;
-                    w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                    w.spawn(new Location(w, block.getX() + x, block.getY() + y, block.getZ() + z), ItemFrame.class, itemFrame -> {
                         itemFrame.setFacingDirection(BlockFace.SOUTH, false);
                         itemFrame.setItem(mapToStack(baseID + "Vs" + "-" + (finalI) + "-" + finalJ + ".jpg", p.getWorld()));
                     });
@@ -636,7 +637,7 @@ public class MyListener implements Listener {
                 for (int j = 0; j < 3; j++) {
                     int finalI = i;
                     int finalJ = j;
-                    w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                    w.spawn(new Location(w, block.getX() + x, block.getY() + y, block.getZ() + z), ItemFrame.class, itemFrame -> {
                         itemFrame.setFacingDirection(BlockFace.WEST, false);
                         itemFrame.setItem(mapToStack(baseID + "Vp" + "-" + (finalI) + "-" + finalJ + ".jpg", p.getWorld()));
                     });
@@ -653,7 +654,7 @@ public class MyListener implements Listener {
                 for (int j = 0; j < 3; j++) {
                     int finalI = i;
                     int finalJ = j;
-                    w.spawn(new Location(w, b.getX() + x, b.getY() + y, b.getZ() + z), ItemFrame.class, itemFrame -> {
+                    w.spawn(new Location(w, block.getX() + x, block.getY() + y, block.getZ() + z), ItemFrame.class, itemFrame -> {
                         itemFrame.setFacingDirection(BlockFace.WEST, false);
                         itemFrame.setItem(mapToStack(baseID + "Rad" + "-" + (finalI) + "-" + finalJ + ".jpg", p.getWorld()));
                     });
@@ -672,12 +673,15 @@ public class MyListener implements Listener {
             PasteCsv.pasteQuiet("9x9place", blockPlaceEvent.getPlayer());
         }
 
-        if(b.getType() == Material.SPONGE) {
-            Location MonitorLocation = b.getLocation();
-            for(int i = 1; i <= 3; i++) {
+        if(block.getType() == Material.SPONGE) {
+            Location spongeLocation = block.getLocation();
+            Location woolLocation = new Location(blockPlaceEvent.getPlayer().getWorld(), spongeLocation.getX() - 1, spongeLocation.getY(), spongeLocation.getZ());
+            woolLocation.getBlock().setType(Material.PINK_WOOL);
+
+            for(int i = 0; i <= 2; i++) {
                 for(int j = 1; j <= 3; j++) {
                     Location nextBlockLocation = new Location(blockPlaceEvent.getPlayer().getWorld(),
-                            MonitorLocation.getX() - i, MonitorLocation.getY() + j, MonitorLocation.getZ());
+                            spongeLocation.getX() - i, spongeLocation.getY() + j, spongeLocation.getZ());
                     nextBlockLocation.getBlock().setType(Material.STONE);
                 }
             }
@@ -691,7 +695,7 @@ public class MyListener implements Listener {
             inventoryClickEvent.setCancelled(true);
 
             ItemStack cursor = inventoryClickEvent.getCurrentItem();
-            Player p = (Player) inventoryClickEvent.getWhoClicked();
+            Player player = (Player) inventoryClickEvent.getWhoClicked();
             assert cursor != null;
 
             int balance;
@@ -720,13 +724,13 @@ public class MyListener implements Listener {
                     writer.write(Integer.toString(balance));
                     writer.close();
                 } else {
-                    p.sendMessage(ChatColor.DARK_RED + "Не хватает денег!");
+                    player.sendMessage(ChatColor.DARK_RED + "Не хватает денег!");
                 }
             }
 
             if (inventoryClickEvent.isLeftClick()) {
-                for (int i = 0; i < p.getInventory().getSize(); i++) {
-                    ItemStack stack = p.getInventory().getItem(i);
+                for (int i = 0; i < player.getInventory().getSize(); i++) {
+                    ItemStack stack = player.getInventory().getItem(i);
 
                     if (stack == null)
                         continue;
