@@ -91,6 +91,7 @@ public class ModelFromImage implements CommandExecutor {
             }
 
             PasteCsv.pasteImage(filename, Bukkit.getPlayer(sender.getName()), img.getWidth(), img.getHeight());
+            writer.close();
             Bukkit.broadcastMessage("Done!");
         } catch (IOException e) {
             Bukkit.broadcastMessage(e.getMessage());

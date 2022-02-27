@@ -12,9 +12,10 @@ import java.io.*;
 public class Commands implements CommandExecutor {
     private NoolartPaperPlugin plugin;
 
-    public static void pythonrun(String filename) {
+    public static void pythonrun(String filename, String argument) {
         try {
-            Process p = Runtime.getRuntime().exec("python " + NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".py 1 2");
+            Process p = Runtime.getRuntime().exec("python " + NoolartPaperPlugin.plugin.getDataFolder() + File.separator +
+                    filename + ".py " + "--id=" + argument);
             BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String s;
@@ -24,7 +25,7 @@ public class Commands implements CommandExecutor {
 
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Bukkit.broadcastMessage(e.toString());
         }
     }
     
@@ -37,7 +38,7 @@ public class Commands implements CommandExecutor {
         if (args.length != 1) {
             return false;
         }
-        pythonrun(args[0]);
+        pythonrun(args[0], null);
 
         return true;
     }
