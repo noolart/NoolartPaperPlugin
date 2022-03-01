@@ -58,6 +58,9 @@ commands:
   perlingeneration:
     description: Генерирует реалистичную поверхность
     usage: /perlingeneration <x-width> <z-width> <scale> <seed> <koef-height>
+  slice:
+    description: Считывает срез между двумя установленными точками
+    usage: /slice <name>
 
 
 
