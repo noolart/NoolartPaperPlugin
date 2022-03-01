@@ -1,6 +1,7 @@
 package com.noolart.noolartpaperplugin.csv;
 
 import com.noolart.noolartpaperplugin.NoolartPaperPlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -9,9 +10,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class CopyCsv implements CommandExecutor {
+    private final static String FIELD_SEPARATOR = ";";
+
     public NoolartPaperPlugin plugin;
 
     public CopyCsv(NoolartPaperPlugin noolartPaperPlugin) {
@@ -28,24 +33,33 @@ public class CopyCsv implements CommandExecutor {
         try {
             try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + filename + ".csv", false)) {
                 String name = sender.getName();
-                Player p = Bukkit.getPlayer(name);
+                Player player = Bukkit.getPlayer(name);
 
-                int cx = (int) Double.min(NoolartPaperPlugin.point1.getX(), NoolartPaperPlugin.point2.getX());
-                int cy = (int) Double.min(NoolartPaperPlugin.point1.getY(), NoolartPaperPlugin.point2.getY());
-                int cz = (int) Double.min(NoolartPaperPlugin.point1.getZ(), NoolartPaperPlugin.point2.getZ());
+                int beginX = (int) Double.min(NoolartPaperPlugin.point1.getX(), NoolartPaperPlugin.point2.getX());
+                int beginY = (int) Double.min(NoolartPaperPlugin.point1.getY(), NoolartPaperPlugin.point2.getY());
+                int beginZ = (int) Double.min(NoolartPaperPlugin.point1.getZ(), NoolartPaperPlugin.point2.getZ());
 
-                int ax = (int) Double.max(NoolartPaperPlugin.point1.getX(), NoolartPaperPlugin.point2.getX());
-                int ay = (int) Double.max(NoolartPaperPlugin.point1.getY(), NoolartPaperPlugin.point2.getY());
-                int az = (int) Double.max(NoolartPaperPlugin.point1.getZ(), NoolartPaperPlugin.point2.getZ());
+                int endX = (int) Double.max(NoolartPaperPlugin.point1.getX(), NoolartPaperPlugin.point2.getX());
+                int endY = (int) Double.max(NoolartPaperPlugin.point1.getY(), NoolartPaperPlugin.point2.getY());
+                int endZ = (int) Double.max(NoolartPaperPlugin.point1.getZ(), NoolartPaperPlugin.point2.getZ());
 
-                for (int i = cx; i < ax + 1; i++) {
-                    for (int i1 = cy; i1 < ay + 1; i1++) {
-                        for (int i2 = cz; i2 < az + 1; i2++) {
-                            World w = p.getWorld();
-                            Location h = new Location(w, (double) i, (double) i1, (double) i2);
-                            String space = " ";
-//                            Bukkit.broadcastMessage(i + " " + i1 + " " + i2 + " " + h.getBlock().getType().toString());
-                            writer.write(i + ";" + i1 + ";" + i2 + ";" + h.getBlock().getType().toString() + ";" + "\n");
+                World world = player.getWorld();
+                Location location = new Location(world, beginX, beginY, beginZ);
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int i = beginX; i < endX + 1; i++) {
+                    for (int j = beginY; j < endY + 1; j++) {
+                        for (int k = beginZ; k < endZ + 1; k++) {
+                            location.set(i, j, k);
+
+                            stringBuilder.append(i - beginX).append(FIELD_SEPARATOR)
+                                    .append(j - beginY).append(FIELD_SEPARATOR)
+                                    .append(k - beginZ).append(FIELD_SEPARATOR)
+                                    .append(location.getBlock().getType().toString()).append(FIELD_SEPARATOR)
+                                    .append("\n");
+
+                            writer.write(stringBuilder.toString());
+                            stringBuilder.setLength(0);
                         }
                     }
                 }
@@ -55,6 +69,7 @@ public class CopyCsv implements CommandExecutor {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
         return true;
     }
 }
