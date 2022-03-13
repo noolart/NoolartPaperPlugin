@@ -13,9 +13,10 @@ public class BreakerListener implements Listener {
 		Block block = event.getBlock();
 		if(Materials.getKeys(block.getType().toString().toLowerCase()).size() != 0) {
 	    	event.setCancelled(true);
-	    	synchronized(damageMaster) {
-	    		damageMaster.initDamage(event.getPlayer(), block, event.getItemInHand());
-	    	}
+	    	damageMaster.initDamage(event.getPlayer(), block, event.getItemInHand());
+		}
+		else {
+			damageMaster.setDefaultMode(event.getPlayer());
 		}
     }
     
@@ -23,9 +24,7 @@ public class BreakerListener implements Listener {
     public void interact(PlayerAnimationEvent event){
     	PlayerAnimationType animation = event.getAnimationType();
     	if(animation.equals(PlayerAnimationType.ARM_SWING)) {
-	    	synchronized(damageMaster) {
-	    		damageMaster.increaseDamage(event.getPlayer());
-	    	}
+	    	damageMaster.increaseDamage(event.getPlayer());
     	}
     }
     

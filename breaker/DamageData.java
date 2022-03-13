@@ -7,6 +7,19 @@ public class DamageData{
 		this.location = location;
 		this.damageSpeed = damageSpeed;
 		this.damageCoefficient = damageCoefficient;
+		Thread thread = new Thread(()->{
+			while(true) {
+				synchronized(this) {
+					System.out.println("THREAD");
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
 	}
 	
 	public Location getLocation(){
@@ -18,7 +31,9 @@ public class DamageData{
 	}
 	
 	public void setLocation(Location location){
-		this.location = location;
+		synchronized(this) {
+			this.location = location;
+		}
 	}
 	
 	public void clearDamage(){
