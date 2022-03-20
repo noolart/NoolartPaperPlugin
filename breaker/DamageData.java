@@ -5,21 +5,14 @@ import org.bukkit.*;
 public class DamageData{
 	DamageData(Location location, float damageSpeed, float damageCoefficient){
 		this.location = location;
+		if(damageSpeed <= NO_DAMAGE) {
+			damageSpeed = DEFAULT_DAMAGE_SPEED;
+		}
 		this.damageSpeed = damageSpeed;
+		if(damageCoefficient <= NO_DAMAGE) {
+			damageCoefficient = DEFAULT_DAMAGE_COEFFICIENT;
+		}
 		this.damageCoefficient = damageCoefficient;
-		Thread thread = new Thread(()->{
-			while(true) {
-				synchronized(this) {
-					System.out.println("THREAD");
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();
 	}
 	
 	public Location getLocation(){
@@ -31,18 +24,16 @@ public class DamageData{
 	}
 	
 	public void setLocation(Location location){
-		synchronized(this) {
-			this.location = location;
-		}
+		this.location = location;
 	}
 	
 	public void clearDamage(){
 		this.damage = NO_DAMAGE;
 	}
 	
-	public void setDamageSpeed(float damageSpeed) {
-		if(damageSpeed < NO_DAMAGE) {
-			damageSpeed *= -1;
+	public void setDamageSpeed(float damageSpeed){
+		if(damageSpeed <= NO_DAMAGE) {
+			damageSpeed = DEFAULT_DAMAGE_SPEED;
 		}
 		this.damageSpeed = damageSpeed;
 	}
@@ -51,13 +42,16 @@ public class DamageData{
 		if(damage == FULL_DAMAGE) {
 			return;
 		}
+		if(extraDamageCoefficient <= NO_DAMAGE) {
+			extraDamageCoefficient = DEFAULT_DAMAGE_COEFFICIENT;
+		}
 		damage += damageSpeed * damageCoefficient * extraDamageCoefficient;
 		if(damage > FULL_DAMAGE) {
 			damage = FULL_DAMAGE;
 		}
 	}
 	
-	public void setDamageCoefficient(float damageCoefficient) {
+	public void setDamageCoefficient(float damageCoefficient){
 		if(damageCoefficient <= NO_DAMAGE) {
 			damageCoefficient = DEFAULT_DAMAGE_COEFFICIENT;
 		}
@@ -67,6 +61,7 @@ public class DamageData{
 	private float NO_DAMAGE = 0.0f;
 	private float FULL_DAMAGE = 1.0f;
 	private float DEFAULT_DAMAGE_COEFFICIENT = 1.0f;
+	private float DEFAULT_DAMAGE_SPEED = 0.05F;
 	
 	private Location location;
 	private float damage = NO_DAMAGE;

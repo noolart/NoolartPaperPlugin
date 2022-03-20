@@ -12,8 +12,6 @@ public class Breaker extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new BreakerListener(), this);
-
-        //getCommand("pythonrun").setExecutor(new Commands(this));
     }
     
     public static JavaPlugin getInstance() {
