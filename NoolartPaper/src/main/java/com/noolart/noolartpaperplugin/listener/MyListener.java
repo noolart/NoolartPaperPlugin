@@ -1,10 +1,7 @@
 package com.noolart.noolartpaperplugin.listener;
 
 import com.google.common.collect.Lists;
-import com.noolart.noolartpaperplugin.Materials;
-import com.noolart.noolartpaperplugin.NoolartPaperPlugin;
-import com.noolart.noolartpaperplugin.PictureDrawer;
-import com.noolart.noolartpaperplugin.Python;
+import com.noolart.noolartpaperplugin.*;
 import com.noolart.noolartpaperplugin.commands.Commands;
 import com.noolart.noolartpaperplugin.csv.PasteCsv;
 import net.md_5.bungee.api.ChatColor;
@@ -30,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -378,6 +376,8 @@ public class MyListener implements Listener {
         Block block = blockPlaceEvent.getBlock();
         BlockState blockState = block.getState();
 
+
+
         if (block.getType() == Material.LECTERN) {
             if (blockState instanceof Lectern) {
                 Lectern l = (Lectern) blockState;
@@ -417,6 +417,8 @@ public class MyListener implements Listener {
         }
 
         if (block.getType() == Material.DARK_OAK_FENCE) {
+
+
             if (block.getLocation().add(0,-1,0).getBlock().getType()==Material.RED_CONCRETE) {
                 NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
                 PasteCsv.paste("OilRid", blockPlaceEvent.getPlayer());
@@ -440,6 +442,16 @@ public class MyListener implements Listener {
                         PasteCsv.pasteQuiet("OilRidBottom", blockPlaceEvent.getPlayer());
                     }
                     NoolartPaperPlugin.point1.setY(NoolartPaperPlugin.point1.getY() + 1);
+                }
+
+                Player p = blockPlaceEvent.getPlayer();
+//                p.setStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE,4);
+                int blocks = p.getStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE);
+//                Bukkit.broadcastMessage("" + blocks);
+                int effectLevel = blocks/5*300;
+                if (blocks>0 && blocks%5==0){
+                    Pay.giveMoneyToPlayer(effectLevel,p);
+                    p.sendMessage("" + ChatColor.BOLD +ChatColor.GOLD+"Ты установил " + ChatColor.RESET + ChatColor.GREEN + blocks + ChatColor.BOLD +ChatColor.GOLD+" шахт!"+"\n"+"Ты получаешь " + ChatColor.RESET + ChatColor.AQUA + ChatColor.BOLD + effectLevel + "$" );
                 }
             }
             else{
@@ -705,10 +717,11 @@ public class MyListener implements Listener {
 
             }
             if(flag) {
-                NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-4, 0, -4);
+                NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-5, 0, -5);
                 PasteCsv.pasteQuiet("11x11place", blockPlaceEvent.getPlayer());
             }
             else {
+                blockPlaceEvent.setCancelled(true);
                 blockPlaceEvent.getPlayer().sendMessage(ChatColor.DARK_RED + "Для установки платформы необходима свободная зона 11x6x11");
             }
         }
@@ -728,6 +741,11 @@ public class MyListener implements Listener {
 
         }
     }
+
+
+
+
+
 
     @EventHandler
     public void inventoryClick(InventoryClickEvent inventoryClickEvent) throws IOException {
@@ -992,6 +1010,17 @@ public class MyListener implements Listener {
         Block b = e2.getBlock();
 
         String path = NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "observers.csv";
+
+        if (b.getType()==Material.COBBLESTONE){
+            Player p = e2.getPlayer();
+            int cobblesPickedUp = p.getStatistic(Statistic.MINE_BLOCK, Material.COBBLESTONE);
+            int len = Integer.toString(cobblesPickedUp).length();
+            int effectLevel = len - 2;
+            if (cobblesPickedUp/(Math.pow(10,len-1))==1){
+                p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,1000000,effectLevel-1));
+                p.sendMessage("" + ChatColor.BOLD +ChatColor.GOLD+"Ты откопал " + ChatColor.RESET + ChatColor.GREEN + cobblesPickedUp + ChatColor.BOLD +ChatColor.GOLD+" блоков булыжника!"+"\n"+"Теперь на тебя наложен эффект "+ChatColor.RESET + ChatColor.BOLD + ChatColor.GREEN + "СПЕШКИ "+ChatColor.RESET + ChatColor.BOLD + ChatColor.AQUA +effectLevel +ChatColor.RESET + ChatColor.BOLD + ChatColor.GOLD+" уровня!" );
+            }
+        }
 
         if (b.getType() == Material.OBSERVER) {
 
