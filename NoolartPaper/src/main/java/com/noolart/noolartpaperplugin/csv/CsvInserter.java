@@ -16,6 +16,14 @@ public class CsvInserter {
     private static final int CORD_Z = 2;
     private static final int MATERIAL = 3;
 
+    public static void pasteInNewThread(File file, NoolartPaperPlugin plugin) {
+        Bukkit.getScheduler().runTask(plugin, () -> paste(file));
+    }
+
+    public static void pasteInNewThread(String filename, NoolartPaperPlugin plugin) {
+        Bukkit.getScheduler().runTask(plugin, () -> paste(filename));
+    }
+
     public static void paste(String filename) {
         File file = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "mccsv" + File.separator + filename + ".csv");
 
@@ -27,7 +35,7 @@ public class CsvInserter {
         paste(file);
     }
 
-    public static void paste(File file){
+    public static void paste(File file) {
         CsvParserSettings settings = new CsvParserSettings();
         settings.setDelimiterDetectionEnabled(true);
         CsvParser parser = new CsvParser(settings);
@@ -56,8 +64,6 @@ public class CsvInserter {
             }
 
             Bukkit.broadcastMessage("Done!");
-        } catch (Exception e) {
-            Bukkit.broadcastMessage("File" + file.getAbsolutePath() + "not found");
         } finally {
             parser.stopParsing();
         }

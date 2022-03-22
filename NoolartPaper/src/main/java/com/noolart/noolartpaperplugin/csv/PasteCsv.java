@@ -13,18 +13,18 @@ import java.io.*;
 import java.util.Scanner;
 
 public class PasteCsv implements CommandExecutor {
-    public NoolartPaperPlugin plugin;
+    public static NoolartPaperPlugin plugin;
 
     public PasteCsv(NoolartPaperPlugin noolartPaperPlugin) {
-        this.plugin = noolartPaperPlugin;
+        plugin = noolartPaperPlugin;
     }
 
     public static void paste(String filename, Player player) {
-        CsvInserter.paste(filename);
+        CsvInserter.pasteInNewThread(filename, plugin);
     }
 
     public static void pasteQuiet(String filename, Player p) {
-        CsvInserter.paste(filename);
+        CsvInserter.pasteInNewThread(filename, plugin);
     }
 
     public static void pasteImage(String filename, Player p, int width, int heigth) {
