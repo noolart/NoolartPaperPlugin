@@ -3,16 +3,27 @@ package breaker;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
 import org.bukkit.event.player.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.noolart.noolartpaperplugin.Materials;
-
 public class BreakerListener implements Listener {
-	public BreakerListener() {
+	public BreakerListener(FileConfiguration instruments, FileConfiguration materials) {
+		if(materials == null) {
+			return;
+		}
+		this.materials = materials;
+		try {
+			damageMaster = new DamageMaster(instruments, materials);
+		}
+		catch(BadFileConfigurationException e) {
+			System.err.println("Can't work with file materials.yml: " + e.getMessage());
+			damageMaster = null;
+			return;
+		}
 		garbagePlayersCollector = new Thread(()->{
 			while(true) {
 				try {
@@ -54,6 +65,9 @@ public class BreakerListener implements Listener {
 	
 	@EventHandler
     public void interact(BlockDamageEvent event){
+		if(damageMaster == null) {
+			return;
+		}
 		synchronized(this) {
 			if(garbageCollectorDoesntWork) {
 				return;
@@ -64,10 +78,10 @@ public class BreakerListener implements Listener {
 		}
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
-		if(Materials.getKeys(block.getType().toString().toLowerCase()).size() != 0) {
+		if(materials.getKeys(false).contains(block.getType().toString().toLowerCase())) {
 	    	if(damageMaster.initDamage(player, block, event.getItemInHand())) {
 		    	event.setCancelled(true);
-	    	};
+	    	}
 		}
 		else {
 			damageMaster.setDefaultMode(player);
@@ -77,6 +91,9 @@ public class BreakerListener implements Listener {
     
     @EventHandler
     public void interact(PlayerAnimationEvent event){
+		if(damageMaster == null) {
+			return;
+		}
 		synchronized(this) {
 			if(garbageCollectorDoesntWork) {
 				return;
@@ -94,9 +111,10 @@ public class BreakerListener implements Listener {
     
     private long GARBAGE_SLEEP_TIME_MILLIS = 100000;
     
-    private DamageMaster damageMaster = new DamageMaster();
+    private DamageMaster damageMaster;
     private Map<String, Boolean> players = new ConcurrentHashMap<String, Boolean>();
     private boolean currentPlayersGeneration;
     private boolean garbageCollectorDoesntWork = false;
     private Thread garbagePlayersCollector;
+    private FileConfiguration materials;
 }

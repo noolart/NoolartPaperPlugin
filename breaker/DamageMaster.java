@@ -2,7 +2,6 @@ package breaker;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.io.*;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -10,23 +9,13 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.configuration.file.*;
 
-import com.noolart.noolartpaperplugin.Materials;
-
 public class DamageMaster{
-	public DamageMaster() {
-        File file = new File(Breaker.getInstance().getDataFolder() + File.separator + "instruments.yml");
-        if (file.exists()) {
-        	try {
-        		instruments = YamlConfiguration.loadConfiguration(file);
-        	}
-        	catch(IllegalArgumentException exception) {
-        		System.err.println("Bad file " + file + ": " + exception.getMessage());
-        		instruments = null;
-        	}
-        }
-        else {
-    		instruments = null;
-        }
+	public DamageMaster(FileConfiguration instruments, FileConfiguration materials) throws BadFileConfigurationException{
+		if(materials == null) {
+			throw new BadFileConfigurationException("materials is null");
+		}
+        this.instruments = instruments;
+        this.materials = materials;
 	}
 	
 	public void clear() {
@@ -72,7 +61,7 @@ public class DamageMaster{
 			return false;
 		}
 		DamageData damageData;
-		float damageSpeed = getDamageSpeed(Materials.getLong(block.getType().toString().toLowerCase(), "Density"));
+		float damageSpeed = getDamageSpeed(materials.getLong(block.getType().toString().toLowerCase() + "." + "Density", DEFAULT_DENSITY));
 		if(damageSpeed <= NO_DAMAGE) {
 			System.err.println("Wrong damage speed " + damageSpeed + ": less or equal zero");
 			return false;
@@ -115,7 +104,9 @@ public class DamageMaster{
 		    		if(!location.getBlock().getBlockData().getMaterial().equals(Material.AIR) && 
 		    				sameLocations(location, block.getLocation())) {
 				    	if(damageData.getDamage() == FULL_DAMAGE) {
-				    		location.getBlock().breakNaturally();
+				    		String blockType = block.getType().toString().toLowerCase();
+				    		block.breakNaturally();
+				    		dropLoot(blockType, location, block.getWorld());
 			    			damageData.setLocation(null);
 			    			return;
 				   		}
@@ -142,6 +133,35 @@ public class DamageMaster{
    			}
    		}
     }
+	
+	private void dropLoot(String block, Location location, World world) {
+		if(location == null || world == null) {
+			return;
+		}
+		List<String> items = materials.getStringList(block + ".Items");
+		if(items.size() == 0) {
+			return;
+		}
+		Iterator<String> iterator = items.iterator();
+		Random random = new Random();
+		while(iterator.hasNext()) {
+			String lootName = iterator.next();
+			Material loot;
+			try {
+				loot = Material.valueOf(lootName.toUpperCase());
+			}
+			catch(IllegalArgumentException e) {
+				System.err.println("In path " + block + ".Items is illegal material: " + lootName);
+				continue;
+			}
+			Long probability = materials.getLong(block + ".Loots." + lootName + ".probability", -1);
+			Long amount = materials.getLong(block + ".Loots." + lootName + ".amount", -1);
+			if(probability.intValue() > random.nextInt(99) && amount.intValue() > 0) {
+				ItemStack item = new ItemStack(loot, amount.intValue());
+				world.dropItem(location, item);
+			}
+		}
+	}
     
     private boolean sameLocations(Location locationA, Location locationB) {
     	if(locationA == null || locationB == null) {
@@ -202,8 +222,10 @@ public class DamageMaster{
     private float MAX_EXTRA_DAMAGE_COEFFICIENT = 1.5F;
     private float MIN_EXTRA_DAMAGE_COEFFICIENT = 0.5F;
     private long WAITING_TIME_MILLIS = 100;
+    private long DEFAULT_DENSITY = 10000;
     
     private Map<String, Executor> threadpools = new ConcurrentHashMap<String, Executor>();
     private FileConfiguration instruments;
+    private FileConfiguration materials;
     private Map<String, DamageData> damages = new ConcurrentHashMap<String, DamageData>();
 }

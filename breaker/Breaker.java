@@ -1,21 +1,36 @@
 package breaker;
 
+import java.io.File;
+
+import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Breaker extends JavaPlugin {
-    private static Breaker plugin;
-
-    public Breaker() {
-        plugin = this;
-    }
-
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new BreakerListener(), this);
+    	FileConfiguration instruments = null, materials = null;
+    	materials = getConfiguration("materials.yml");
+    	if(materials == null) {
+    		return;
+    	}
+    	instruments = getConfiguration("instruments.yml");
+        getServer().getPluginManager().registerEvents(new BreakerListener(instruments, materials), this);
     }
     
-    public static JavaPlugin getInstance() {
-    	return plugin;
+    private FileConfiguration getConfiguration(String fileName) {
+    	File file = new File(this.getDataFolder() + File.separator + fileName);
+        if (file.exists()) {
+        	try {
+        		return YamlConfiguration.loadConfiguration(file);
+        	}
+        	catch(IllegalArgumentException exception) {
+        		System.err.println("Can't get configuration of  " + file + ": " + exception.getMessage());
+        		return null;
+        	}
+        }
+        else {
+        	return null;
+        }
     }
 }
 
