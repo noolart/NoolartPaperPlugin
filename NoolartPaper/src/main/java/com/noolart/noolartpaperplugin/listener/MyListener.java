@@ -445,8 +445,7 @@ public class MyListener implements Listener {
                 }
 
                 Player p = blockPlaceEvent.getPlayer();
-//                p.setStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE,4);
-                int blocks = p.getStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE);
+                int blocks = p.getStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE)+1;
 //                Bukkit.broadcastMessage("" + blocks);
                 int effectLevel = blocks/5*300;
                 if (blocks>0 && blocks%5==0){
@@ -1014,6 +1013,7 @@ public class MyListener implements Listener {
         if (b.getType()==Material.COBBLESTONE){
             Player p = e2.getPlayer();
             int cobblesPickedUp = p.getStatistic(Statistic.MINE_BLOCK, Material.COBBLESTONE);
+
             int len = Integer.toString(cobblesPickedUp).length();
             int effectLevel = len - 2;
             if (cobblesPickedUp/(Math.pow(10,len-1))==1){
