@@ -14,7 +14,6 @@ import org.bukkit.entity.ItemFrame;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.nio.file.NotLinkException;
 
 public class Slice implements CommandExecutor {
 
@@ -47,7 +46,7 @@ public class Slice implements CommandExecutor {
                     loc3.add(1, -(yMax - yMin), 0);
                 }
 
-                Commands.pythonrun("all_in", filename);
+                Commands.pythonrun("seism", filename);
                 Location screenLocation = new Location(Bukkit.getPlayer(commandSender.getName()).getWorld(), (xMax + xMin) / 2, loc1.getY() + 1, loc1.getZ());
                 screenLocation.getBlock().setType(Material.OBSIDIAN);
                 Bukkit.getPlayer(commandSender.getName()).getWorld().spawn(screenLocation.add(0, 0, 1), ItemFrame.class, itemframe -> {
