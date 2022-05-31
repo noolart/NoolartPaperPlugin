@@ -135,6 +135,7 @@ public class MyListener implements Listener {
                                 Bukkit.broadcastMessage(i + " " + i1 + " " + i2 + " " + h.getBlock().getType().toString());
                             }
                         }
+
                     }
 
                     writer.flush();
@@ -245,6 +246,8 @@ public class MyListener implements Listener {
                 int z = -1;
                 World world = player.getWorld();
                 Block clickedBlock = event.getClickedBlock();
+
+
 
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
@@ -395,7 +398,7 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
-    public void interact(BlockPlaceEvent blockPlaceEvent) throws IOException {
+    public void interact(BlockPlaceEvent blockPlaceEvent) throws IOException, InterruptedException {
         Block block = blockPlaceEvent.getBlock();
         BlockState blockState = block.getState();
 
@@ -438,6 +441,8 @@ public class MyListener implements Listener {
 
 //            e1.getPlayer().getInventory().addItem(mapToStack("test.png",e1.getPlayer().getWorld()));
         }
+        
+
 
         if (block.getType() == Material.DARK_OAK_FENCE) {
 
@@ -445,70 +450,85 @@ public class MyListener implements Listener {
 
             if (block.getLocation().add(0,-1,0).getBlock().getType()==Material.RED_CONCRETE) {
 
-                blockPlaceEvent.getPlayer().getWorld().spawn(blockPlaceEvent.getBlock().getLocation().add(0.5,-1,0.5), ArmorStand.class, armorStand -> {
-                    armorStand.setVisible(false);
-                    armorStand.setGravity(false);
-                    armorStand.setCustomNameVisible(true);
-                    armorStand.setCanMove(false);
-                });
-
-                Collection<ArmorStand> armorStands = blockPlaceEvent.getBlock().getLocation().getNearbyEntitiesByType(ArmorStand.class,1);
-                Iterator<ArmorStand> iterator = armorStands.iterator();
-
-                ArmorStand armorStand = iterator.next();
-
-                Thread thread = new Thread(() -> {
-                    NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
 
 
+//                blockPlaceEvent.getPlayer().getWorld().spawn(blockPlaceEvent.getBlock().getLocation().add(0.5,-1,0.5), ArmorStand.class, armorStand -> {
+//                    armorStand.setVisible(false);
+//                    armorStand.setGravity(false);
+//                    armorStand.setCustomNameVisible(true);
+//                    armorStand.setCanMove(false);
+//
+//
+//                });
 
-                        for (int i = 90; i > 0; i--) {
-                            armorStand.setCustomName(ChatColor.RED +""+ i);
+
+//                Collection<ArmorStand> armorStands = blockPlaceEvent.getBlock().getLocation().getNearbyEntitiesByType(ArmorStand.class,1);
+//                Iterator<ArmorStand> iterator = armorStands.iterator();
+//
+//                ArmorStand armorStand = iterator.next();
+
+
+                NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
+                //PasteCsv.paste("building_platform",blockPlaceEvent.getPlayer());
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 15; i > 0; i--) {
+                            Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+                            //armorStand.setCustomName(ChatColor.RED + "" + i);
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+
                         }
-
-                        armorStand.remove();
-
-
-                        PasteCsv.paste("OilRid", blockPlaceEvent.getPlayer());
-
-                        NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 2, 1, block.getLocation().getZ() - 2);
-                        double depth = block.getLocation().getY() - 1;
-                        Location loc = new Location(blockPlaceEvent.getPlayer().getWorld(), NoolartPaperPlugin.point1.getX(), 1, NoolartPaperPlugin.point1.getZ());
-
-                        for (int i = 0; i < depth; i++) {
-                            loc.add(-1, 0, -1);
-                        }
-
-                        for (int i = 0; i < depth; i++) {
-                            if (i == depth - 1) {
-                                PasteCsv.pasteQuiet("OilRidBottom1", blockPlaceEvent.getPlayer());
-                            } else if (i % 10 == 0) {
-                                PasteCsv.pasteQuiet("OilRidBottom2", blockPlaceEvent.getPlayer());
-                            } else if (i % 5 == 0 || i % 6 == 0) {
-                                PasteCsv.pasteQuiet("OilRidBottom3", blockPlaceEvent.getPlayer());
-                            } else {
-                                PasteCsv.pasteQuiet("OilRidBottom", blockPlaceEvent.getPlayer());
-                            }
-                            NoolartPaperPlugin.point1.setY(NoolartPaperPlugin.point1.getY() + 1);
-                        }
-
-                        Player p = blockPlaceEvent.getPlayer();
-                        int blocks = p.getStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE)+1;
-//                Bukkit.broadcastMessage("" + blocks);
-                        int effectLevel = blocks/5*300;
-                        if (blocks>0 && blocks%5==0){
-                            Pay.giveMoneyToPlayer(effectLevel,p);
-                            p.sendMessage("" + ChatColor.BOLD +ChatColor.GOLD+"Ты установил " + ChatColor.RESET + ChatColor.GREEN + blocks + ChatColor.BOLD +ChatColor.GOLD+" шахт!"+"\n"+"Ты получаешь " + ChatColor.RESET + ChatColor.AQUA + ChatColor.BOLD + effectLevel + "$" );
-                        }
-
+                    }
                 });
                 thread.start();
+                thread.join();
 
+
+                NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
+
+
+
+
+
+                PasteCsv.paste("OilRid", blockPlaceEvent.getPlayer());
+
+                NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 2, -63, block.getLocation().getZ() - 2);
+                double depth = block.getLocation().getY() + 63;
+                Location loc = new Location(blockPlaceEvent.getPlayer().getWorld(), NoolartPaperPlugin.point1.getX(), 1, NoolartPaperPlugin.point1.getZ());
+
+                for (int i = 0; i < depth; i++) {
+                    loc.add(-1, 0, -1);
+                }
+
+                for (int i = 0; i < depth; i++) {
+                    if (i == depth - 1) {
+                        PasteCsv.pasteQuiet("OilRidBottom1", blockPlaceEvent.getPlayer());
+                    } else if (i % 10 == 0) {
+                        PasteCsv.pasteQuiet("OilRidBottom2", blockPlaceEvent.getPlayer());
+                    } else if (i % 5 == 0 || i % 6 == 0) {
+                        PasteCsv.pasteQuiet("OilRidBottom3", blockPlaceEvent.getPlayer());
+                    } else {
+                        PasteCsv.pasteQuiet("OilRidBottom", blockPlaceEvent.getPlayer());
+                    }
+                    NoolartPaperPlugin.point1.setY(NoolartPaperPlugin.point1.getY() + 1);
+                }
+
+                Player p = blockPlaceEvent.getPlayer();
+                int blocks = p.getStatistic(Statistic.USE_ITEM, Material.DARK_OAK_FENCE) + 1;
+//                Bukkit.broadcastMessage("" + blocks);
+                int effectLevel = blocks / 5 * 300;
+                if (blocks > 0 && blocks % 5 == 0) {
+                    Pay.giveMoneyToPlayer(effectLevel, p);
+                    p.sendMessage("" + ChatColor.BOLD + ChatColor.GOLD + "Ты установил " + ChatColor.RESET + ChatColor.GREEN + blocks + ChatColor.BOLD + ChatColor.GOLD + " шахт!" + "\n" + "Ты получаешь " + ChatColor.RESET + ChatColor.AQUA + ChatColor.BOLD + effectLevel + "$");
+                }
+
+                //}
+               // }, 5*20);
 
 
 
@@ -520,46 +540,58 @@ public class MyListener implements Listener {
         }
 
         if (block.getType() == Material.STONE_BRICKS) {
-            NoolartPaperPlugin.point1 = block.getLocation().clone();
-            PasteCsv.paste("microscope",blockPlaceEvent.getPlayer());
-            World w = blockPlaceEvent.getPlayer().getWorld();
-            w.spawn(block.getLocation().add(0,1,0), ItemFrame.class, itemFrame -> {
-                itemFrame.setFacingDirection(BlockFace.NORTH, false);
-            });
-            w.spawn(block.getLocation().add(0,1,2), ItemFrame.class, itemFrame -> {
-                itemFrame.setFacingDirection(BlockFace.UP);
-            });
-        }
 
-
-        if (block.getType() == Material.IRON_BARS) {
-            if (block.getLocation().add(0,-1,0).getBlock().getType()==Material.RED_CONCRETE) {
-                blockPlaceEvent.getPlayer().getWorld().spawn(blockPlaceEvent.getBlock().getLocation().add(0.5,-1,0.5), ArmorStand.class, armorStand -> {
-                    armorStand.setVisible(false);
-                    armorStand.setGravity(false);
-                    armorStand.setCustomNameVisible(true);
-                    armorStand.setCanMove(false);
-                });
-
-                Collection<ArmorStand> armorStands = blockPlaceEvent.getBlock().getLocation().getNearbyEntitiesByType(ArmorStand.class,1);
-                Iterator<ArmorStand> iterator = armorStands.iterator();
-
-                ArmorStand armorStand = iterator.next();
-
-                Thread thread = new Thread(() -> {
-                    NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
-
-
-                    for (int i = 90; i > 0; i--) {
-                        armorStand.setCustomName(ChatColor.RED + "" + i);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 15; i > 0; i--) {
+                        Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+                        //armorStand.setCustomName(ChatColor.RED + "" + i);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
 
-                    armorStand.remove();
+                    }
+                }
+            });
+            thread.start();
+            thread.join();
+                NoolartPaperPlugin.point1 = block.getLocation().clone();
+                PasteCsv.paste("microscope", blockPlaceEvent.getPlayer());
+                World w = blockPlaceEvent.getPlayer().getWorld();
+                w.spawn(block.getLocation().add(0, 1, 0), ItemFrame.class, itemFrame -> {
+                    itemFrame.setFacingDirection(BlockFace.NORTH, false);
+                });
+                w.spawn(block.getLocation().add(0, 1, 2), ItemFrame.class, itemFrame -> {
+                    itemFrame.setFacingDirection(BlockFace.UP);
+                });
+
+        }
+
+
+        if (block.getType() == Material.IRON_BARS) {
+            if (block.getLocation().add(0,-1,0).getBlock().getType()==Material.RED_CONCRETE) {
+                NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
+                //PasteCsv.paste("building_platform",blockPlaceEvent.getPlayer());
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 15; i > 0; i--) {
+                            Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+                            //armorStand.setCustomName(ChatColor.RED + "" + i);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                });
+                thread.start();
+                thread.join();
                     blockPlaceEvent.getPlayer().sendMessage("wait...");
 
                     File solidity = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Density.csv");
@@ -810,8 +842,7 @@ public class MyListener implements Listener {
                     }
 
                     baseID++;
-                });
-                thread.start();
+
             }
             else{
                 blockPlaceEvent.setCancelled(true);
@@ -821,38 +852,61 @@ public class MyListener implements Listener {
         }
 
         if (blockPlaceEvent.getBlock().getType() == Material.RED_CONCRETE) {
-           boolean flag = true;
-            Location l = block.getLocation().add(-5,0,-5);
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 10; j++) {
-                    for (int k = 0; k < 10; k++) {
-                        l.add(0,0,1);
-                        //Bukkit.broadcastMessage(l.getBlock().getType().toString() + " "+l.getX()+" " + l.getZ());
 
-                        if (l.getBlock().getType()!=Material.AIR && l.getBlock().getType()!=Material.RED_CONCRETE){
-                            flag = false;
+                boolean flag = true;
+                Location l = block.getLocation().add(-5, 0, -5);
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 10; j++) {
+                        for (int k = 0; k < 10; k++) {
+                            l.add(0, 0, 1);
+                            //Bukkit.broadcastMessage(l.getBlock().getType().toString() + " "+l.getX()+" " + l.getZ());
+
+                            if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != Material.RED_CONCRETE) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (!flag) {
                             break;
                         }
+                        l.add(1, 0, -10);
                     }
-                    if (!flag){
+                    if (!flag) {
                         break;
                     }
-                    l.add(1,0,-10);
-                }
-                if (!flag){
-                    break;
-                }
-                l.add(-10,1,0);
+                    l.add(-10, 1, 0);
 
-            }
-            if(flag) {
-                NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-5, 0, -5);
-                PasteCsv.pasteQuiet("11x11place", blockPlaceEvent.getPlayer());
-            }
-            else {
-                blockPlaceEvent.setCancelled(true);
-                blockPlaceEvent.getPlayer().sendMessage(ChatColor.DARK_RED + "Для установки платформы необходима свободная зона 11x6x11");
-            }
+                }
+                if (flag) {
+                    NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-5, 0, -5);
+                    //PasteCsv.paste("building_platform",blockPlaceEvent.getPlayer());
+                    Thread thread = new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            for (int i = 5; i > 0; i--) {
+                                Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+                                //armorStand.setCustomName(ChatColor.RED + "" + i);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
+                    });
+                    thread.start();
+                    thread.join();
+                        NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-5, 0, -5);
+                        PasteCsv.pasteQuiet("11x11place", blockPlaceEvent.getPlayer());
+
+                } else {
+                    blockPlaceEvent.setCancelled(true);
+                    blockPlaceEvent.getPlayer().sendMessage(ChatColor.DARK_RED + "Для установки платформы необходима свободная зона 11x6x11");
+                }
+
+
         }
 
         if(block.getType() == Material.SPONGE) {
@@ -870,6 +924,15 @@ public class MyListener implements Listener {
 
         }
     }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1283,6 +1346,7 @@ public class MyListener implements Listener {
         Bukkit.broadcastMessage(Float.toString(p.getTotalExperience()));
         if (p.getTotalExperience() > 51 && p.getTotalExperience() < 58) {
             p.sendMessage("" + ChatColor.AQUA + "У тебя достаточно опыта для получения нового навыка! Приобрети его " + ChatColor.GREEN + ChatColor.BOLD + "/expShop");
+
         }
 
     }
@@ -1326,6 +1390,7 @@ public class MyListener implements Listener {
 
             };
             test.runTaskTimer(NoolartPaperPlugin.plugin, 5, 4);
+
         }
     }
 }

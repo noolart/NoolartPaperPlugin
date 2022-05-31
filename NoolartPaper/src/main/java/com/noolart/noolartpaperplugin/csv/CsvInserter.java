@@ -38,6 +38,9 @@ public class CsvInserter {
             parser.beginParsing(file);
 
             Location location = NoolartPaperPlugin.point1;
+
+            Location locationBackUp = location.clone();
+
             int x = (int) location.getX();
             int y = (int) location.getY();
             int z = (int) location.getZ();
@@ -48,13 +51,18 @@ public class CsvInserter {
                     double dy = y + Integer.parseInt(row[CORD_Y]);
                     double dz = z + Integer.parseInt(row[CORD_Z]);
 
+                    //System.out.println(dx+" "+ dy+ " "+dz);
+                    //System.out.println(row[MATERIAL].toUpperCase());
+
                     location.set(dx, dy, dz);
                     location.getBlock().setType(Material.valueOf(row[MATERIAL].toUpperCase()));
                 } catch (Exception ignored) {
+                    Bukkit.broadcastMessage(ignored.getMessage());
                     Bukkit.broadcastMessage("can't parse block " + Arrays.toString(row));
                 }
             }
 
+            NoolartPaperPlugin.point1 = locationBackUp;
             Bukkit.broadcastMessage("Done!");
         } catch (Exception e) {
             Bukkit.broadcastMessage("File" + file.getAbsolutePath() + "not found");

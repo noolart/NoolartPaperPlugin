@@ -6,6 +6,7 @@ import com.noolart.noolartpaperplugin.csv.GenerationFromCsv;
 import com.noolart.noolartpaperplugin.csv.PasteCsv;
 import com.noolart.noolartpaperplugin.listener.MyListener;
 import com.noolart.noolartpaperplugin.listener.MyListener1;
+import com.noolart.noolartpaperplugin.listener.MyListener2;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -107,6 +108,7 @@ public class NoolartPaperPlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new MyListener(), this);
         getServer().getPluginManager().registerEvents(new MyListener1(), this);
+        getServer().getPluginManager().registerEvents(new MyListener2(), this);
 
         Objects.requireNonNull(getCommand("pythonrun")).setExecutor(new Commands(this));
         Objects.requireNonNull(getCommand("copyBin")).setExecutor(new Commands1(this));
