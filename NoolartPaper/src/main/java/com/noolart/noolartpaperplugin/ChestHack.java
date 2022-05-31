@@ -23,12 +23,12 @@ public class ChestHack implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player p = Bukkit.getPlayer(sender.getName());
-        Location l = p.getLocation();
-        Block b = l.add(0, -1, 0).getBlock();
-        b.setType(Material.CHEST);
+        Player player = Bukkit.getPlayer(sender.getName());
+        Location location = player.getLocation();
+        Block block = location.add(0, -1, 0).getBlock();
+        block.setType(Material.CHEST);
 
-        Chest chest = (Chest) b.getState();
+        Chest chest = (Chest) block.getState();
 
         for (int i = 0; i < ITEMS_IN_CHEST_COUNT; i++) {
             chest.getInventory().addItem(new ItemStack(Material.valueOf(args[0]), 64));

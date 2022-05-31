@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">retrofit</string>
+    <string name="day_picture">Астрономическая картинка дня</string>
+</resources>
