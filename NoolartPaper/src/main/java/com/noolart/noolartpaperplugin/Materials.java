@@ -16,6 +16,9 @@ public class Materials {
 
     public static void init() {
         File file = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "materials.yml");
+
+        Bukkit.broadcastMessage(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "materials.yml");
+
         if (!file.exists()) {
             try {
                 file.getParentFile().mkdirs();

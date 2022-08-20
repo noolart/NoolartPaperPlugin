@@ -38,6 +38,8 @@ public class NoolartPaperPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        Materials.init();
         expShop = Bukkit.createInventory(null, 54, "Experience Shop Page 1");
 
         File expShopCsv = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "expShop" + File.separator + "expShop1.csv");
@@ -78,7 +80,7 @@ public class NoolartPaperPlugin extends JavaPlugin {
             e.printStackTrace();
         }
 
-        Materials.init();
+
 
         shop = Bukkit.createInventory(null, 54, "Shop");
         File shopFile = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "shop.csv");
@@ -144,9 +146,9 @@ public class NoolartPaperPlugin extends JavaPlugin {
                     if (key.equals("name")) continue;
                     if (key.equals("finded")) continue;
 //                    Bukkit.broadcastMessage(b.getType().toString().toLowerCase()+":"+hashMap.get(b.getType().toString().toLowerCase()));
-                    if (finds.get(p.getName()).get(b.getType().toString().toLowerCase()).equals("true")) {
+                    //if (finds.get(p.getName()).get(b.getType().toString().toLowerCase()).equals("true")) {
                         res += " " + key + "=" + Materials.getString(b.getType().toString().toLowerCase(), key);
-                    }
+                    //}
                 }
                 p.sendActionBar();
                 p.sendActionBar(res);

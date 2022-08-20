@@ -24,17 +24,22 @@ public class MyListener2 implements Listener {
 
     public void interact (PlayerBucketFillEvent playerBucketFillEvent){
 
-        Location location = playerBucketFillEvent.getBlock().getLocation().add(-2,-2,-2);
-        int count = 0;
-
         int radius = 11;
+
+        Location location = playerBucketFillEvent.getBlock().getLocation().add(-((radius-1)/2),-((radius-1)/2),-((radius-1)/2));
+        Location start = location.clone();
+        int count = 0;
 
         for (int i = 0; i < radius; i++) {
             for (int j = 0; j < radius ; j++) {
                 for (int k = 0; k < radius; k++) {
 
                     if (location.getBlock().getType() == Material.CUT_SANDSTONE){
-                        count++;
+                        count+= (radius-1)/2+1 - location.distance(start);
+                    }
+
+                    else if (location.getBlock().getType() == Material.AIR){
+                        count+=0.5;
                     }
 
                     location.add(0,0,1);
@@ -50,9 +55,9 @@ public class MyListener2 implements Listener {
 
 
 
-        bucketItemMeta.setLore(Collections.singletonList(convertToInvisibleString( Integer.toString(count))));
+        bucketItemMeta.setLore(Collections.singletonList(  Integer.toString ((int)(count/10))));
 
-        System.out.println(convertToInvisibleString(Integer.toString(count)));
+        System.out.println(Integer.toString(count));
 
 
 
@@ -66,7 +71,7 @@ public class MyListener2 implements Listener {
 
     public void interact (CauldronLevelChangeEvent cauldronLevelChangeEvent){
 
-        if (cauldronLevelChangeEvent.getOldLevel()<cauldronLevelChangeEvent.getNewLevel() && cauldronLevelChangeEvent.getBlock().getLocation().add(0,-1,0).getBlock().getType() == Material.PURPLE_TERRACOTTA){
+        if (cauldronLevelChangeEvent.getOldLevel()<cauldronLevelChangeEvent.getNewLevel() && cauldronLevelChangeEvent.getBlock().getLocation().add(0,-1,0).getBlock().getType() == Material.SPRUCE_PLANKS){
 
 
 
@@ -74,7 +79,7 @@ public class MyListener2 implements Listener {
             Player p = (Player) cauldronLevelChangeEvent.getEntity();
             assert p != null;
 
-            int oilPercent = Integer.parseInt(p.getItemInHand().getItemMeta().getLore().get(0).substring(1));
+            int oilPercent = Integer.parseInt(p.getItemInHand().getItemMeta().getLore().get(0));
 
             p.getInventory().getItemInHand().setType(Material.AIR);
 

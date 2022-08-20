@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.file.NotLinkException;
+import java.util.concurrent.Executors;
 
 public class Slice implements CommandExecutor {
 
@@ -44,18 +45,19 @@ public class Slice implements CommandExecutor {
                 for (int i = xMin; i < xMax; i++){
                     for (int j = yMin; j < yMax; j++) {
                         loc3.add(0, 1, 0);
-                        fw.write((int)loc3.getX()+";"+(int)loc3.getY()+";"+(int)loc3.getZ()+";"+loc3.getBlock().getType().toString()+";"+"\n");
+                        if (loc3.getBlock().getType()!=Material.AIR) {
+                            fw.write((int) loc3.getX() + ";" + (int) loc3.getY() + ";" + (int) loc3.getZ() + ";" + loc3.getBlock().getType().toString() + ";" + "\n");
+                        }
                     }
                     loc3.add(1, -(yMax - yMin), 0);
                 }
-                Commands.pythonrun("seism",filename);
-                Location screenLocation = new Location(Bukkit.getPlayer(commandSender.getName()).getWorld(),(xMax+xMin)/2,loc1.getY()+1,loc1.getZ());
-                screenLocation.getBlock().setType(Material.OBSIDIAN);
-                Bukkit.getPlayer(commandSender.getName()).getWorld().spawn(screenLocation.add(0,0,1), ItemFrame.class, itemframe -> {
-                    itemframe.setFacingDirection(BlockFace.SOUTH);
-                    itemframe.setItem(MyListener.mapToStack(filename+".jpg",Bukkit.getPlayer(commandSender.getName()).getWorld()));
 
-                        });
+                fw.close();
+
+                Commands.pythonrun("seism", filename);
+                Bukkit.getPlayer(commandSender.getName()).getInventory().addItem(MyListener.mapToStack(filename + ".jpg",Bukkit.getPlayer(commandSender.getName()).getWorld()));
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -64,27 +66,46 @@ public class Slice implements CommandExecutor {
             Bukkit.getPlayer(commandSender.getName()).sendMessage("" + ChatColor.YELLOW + ChatColor.BOLD + "Slice is done!");
 
         }
-        if (loc1.getX()==loc2.getX()) {
+        else if (loc1.getX()==loc2.getX()) {
 
 
-            try (FileWriter fw = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "slices\\" + filename + ".csv",false)){
-                fw.write("");
-                int zMax = (int) Double.max(loc1.getZ(), loc2.getZ());
-                int yMax = (int) Double.max(loc1.getY(),loc2.getY());
-                int zMin = (int) Double.min(loc1.getZ(), loc2.getZ());
-                int yMin = (int) Double.min(loc1.getY(),loc2.getY());
-                Location loc3 =  new Location(Bukkit.getPlayer(commandSender.getName()).getWorld(),zMin,yMin,loc1.getZ());
-                for (int i = zMin; i < zMax; i++){
+              try (FileWriter fw = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "slices\\" + filename + ".csv",false)){
+                  fw.write("");
+                  int zMax = (int) Double.max(loc1.getZ(), loc2.getZ());
+                  int yMax = (int) Double.max(loc1.getY(),loc2.getY());
+                  int zMin = (int) Double.min(loc1.getZ(), loc2.getZ());
+                  int yMin = (int) Double.min(loc1.getY(),loc2.getY());
+
+
+                  Location loc3 =  new Location(Bukkit.getPlayer(commandSender.getName()).getWorld(),loc1.getX(),yMin,zMin);
+                  for (int i = zMin; i < zMax; i++){
                     for (int j = yMin; j < yMax; j++) {
                         loc3.add(0, 1, 0);
-                        fw.write(loc3.getBlock().getType().toString()+"\n");
+                        if (loc3.getBlock().getType()!=Material.AIR) {
+                            fw.write((int) loc3.getZ() + ";" + (int) loc3.getY() + ";" + (int) loc3.getX() + ";" + loc3.getBlock().getType().toString() + ";" + "\n");
+                        }
                     }
                     loc3.add(0, -(yMax - yMin), 1);
-                }
-            } catch (IOException e) {
+
+                    }
+
+                  fw.close();
+
+                  Commands.pythonrun("seism", filename);
+                  Bukkit.getPlayer(commandSender.getName()).getInventory().addItem(MyListener.mapToStack(filename + ".jpg",Bukkit.getPlayer(commandSender.getName()).getWorld()));
+
+
+
+
+              } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
+
             Bukkit.getPlayer(commandSender.getName()).sendMessage("" + ChatColor.YELLOW + ChatColor.BOLD + "Slice is done!");
+
+
 
 
         }

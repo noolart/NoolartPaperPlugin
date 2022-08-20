@@ -69,6 +69,9 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws FileNotFoundException {
+
+
+
         event.setJoinMessage("" + ChatColor.GOLD + ChatColor.BOLD + "Welcome, " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + event.getPlayer().getName() + "!" + "\n" + ChatColor.GOLD + ChatColor.BOLD + "server by Novosibirsk State University");
 
         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -468,25 +471,25 @@ public class MyListener implements Listener {
 //                ArmorStand armorStand = iterator.next();
 
 
-                NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
+                //NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
                 //PasteCsv.paste("building_platform",blockPlaceEvent.getPlayer());
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 15; i > 0; i--) {
-                            Bukkit.broadcastMessage(ChatColor.RED + ""+i);
-                            //armorStand.setCustomName(ChatColor.RED + "" + i);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                });
-                thread.start();
-                thread.join();
+//                Thread thread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        for (int i = 15; i > 0; i--) {
+//                            Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+//                            //armorStand.setCustomName(ChatColor.RED + "" + i);
+//                            try {
+//                                Thread.sleep(1000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    }
+//                });
+//                thread.start();
+//                thread.join();
 
 
                 NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
@@ -541,23 +544,23 @@ public class MyListener implements Listener {
 
         if (block.getType() == Material.STONE_BRICKS) {
 
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 15; i > 0; i--) {
-                        Bukkit.broadcastMessage(ChatColor.RED + ""+i);
-                        //armorStand.setCustomName(ChatColor.RED + "" + i);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-            });
-            thread.start();
-            thread.join();
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    for (int i = 15; i > 0; i--) {
+//                        Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+//                        //armorStand.setCustomName(ChatColor.RED + "" + i);
+//                        try {
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }
+//            });
+//            thread.start();
+//            thread.join();
                 NoolartPaperPlugin.point1 = block.getLocation().clone();
                 PasteCsv.paste("microscope", blockPlaceEvent.getPlayer());
                 World w = blockPlaceEvent.getPlayer().getWorld();
@@ -575,23 +578,23 @@ public class MyListener implements Listener {
             if (block.getLocation().add(0,-1,0).getBlock().getType()==Material.RED_CONCRETE) {
                 NoolartPaperPlugin.point1 = new Location(blockPlaceEvent.getPlayer().getWorld(), block.getLocation().getX() - 3, block.getLocation().getY(), block.getLocation().getZ() - 3);
                 //PasteCsv.paste("building_platform",blockPlaceEvent.getPlayer());
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 15; i > 0; i--) {
-                            Bukkit.broadcastMessage(ChatColor.RED + ""+i);
-                            //armorStand.setCustomName(ChatColor.RED + "" + i);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                });
-                thread.start();
-                thread.join();
+//                Thread thread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        for (int i = 15; i > 0; i--) {
+//                            Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+//                            //armorStand.setCustomName(ChatColor.RED + "" + i);
+//                            try {
+//                                Thread.sleep(1000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    }
+//                });
+//                thread.start();
+//                thread.join();
                     blockPlaceEvent.getPlayer().sendMessage("wait...");
 
                     File solidity = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Density.csv");
@@ -880,24 +883,24 @@ public class MyListener implements Listener {
                 if (flag) {
                     NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-5, 0, -5);
                     //PasteCsv.paste("building_platform",blockPlaceEvent.getPlayer());
-                    Thread thread = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            for (int i = 5; i > 0; i--) {
-                                Bukkit.broadcastMessage(ChatColor.RED + ""+i);
-                                //armorStand.setCustomName(ChatColor.RED + "" + i);
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                    });
-                    thread.start();
-                    thread.join();
+//                    Thread thread = new Thread(new Runnable() {
+//
+//                        @Override
+//                        public void run() {
+//                            for (int i = 5; i > 0; i--) {
+//                                Bukkit.broadcastMessage(ChatColor.RED + ""+i);
+//                                //armorStand.setCustomName(ChatColor.RED + "" + i);
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                            }
+//                        }
+//                    });
+//                    thread.start();
+//                    thread.join();
                         NoolartPaperPlugin.point1 = blockPlaceEvent.getBlock().getLocation().add(-5, 0, -5);
                         PasteCsv.pasteQuiet("11x11place", blockPlaceEvent.getPlayer());
 

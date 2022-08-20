@@ -14,8 +14,14 @@ public class Commands implements CommandExecutor {
 
     public static void pythonrun(String filename, String argument) {
         try {
-            Process p = Runtime.getRuntime().exec("python " + NoolartPaperPlugin.plugin.getDataFolder() + File.separator +
-                    filename + ".py " + "--id=" + argument);
+
+            File toRun = new File (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".py");
+
+            String command = "python " + toRun.getAbsolutePath() + " " + "--id=" + argument;
+
+            Process p = Runtime.getRuntime().exec(command);
+
+
             BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String s;
@@ -23,9 +29,13 @@ public class Commands implements CommandExecutor {
                 Bukkit.broadcastMessage(ChatColor.BLUE + s);
             }
 
+
+
             in.close();
+
+
         } catch (IOException e) {
-            Bukkit.broadcastMessage(e.toString());
+                Bukkit.broadcastMessage(e.toString());
         }
     }
     
@@ -35,10 +45,10 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label1, String[] args) {
-        if (args.length != 1) {
+        if (args.length != 2) {
             return false;
         }
-        pythonrun(args[0], null);
+        pythonrun(args[0], args[1]);
 
         return true;
     }
