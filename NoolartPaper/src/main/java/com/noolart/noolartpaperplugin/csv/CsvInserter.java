@@ -57,21 +57,21 @@ public class CsvInserter {
                     location.set(dx, dy, dz);
                     location.getBlock().setType(Material.valueOf(row[MATERIAL].toUpperCase()));
                 } catch (Exception ignored) {
-                    //Bukkit.broadcastMessage(ignored.getMessage());
-                    //Bukkit.broadcastMessage("can't parse block " + Arrays.toString(row));
+                    Bukkit.broadcastMessage(ignored.getMessage());
+                    Bukkit.broadcastMessage("can't parse block " + Arrays.toString(row));
                 }
             }
 
             NoolartPaperPlugin.point1 = locationBackUp;
-           // Bukkit.broadcastMessage("Done!");
+            Bukkit.broadcastMessage("Done!");
         } catch (Exception e) {
-            //Bukkit.broadcastMessage("File" + file.getAbsolutePath() + "not found");
+            Bukkit.broadcastMessage("File" + file.getAbsolutePath() + "not found");
         } finally {
             parser.stopParsing();
         }
 
         long finish = System.currentTimeMillis();
         long elapsed = finish - start;
-        //Bukkit.broadcastMessage("вставка модели заняла: " + elapsed + "миллисекунд");
+        Bukkit.broadcastMessage("вставка модели заняла: " + elapsed + "миллисекунд");
     }
 }

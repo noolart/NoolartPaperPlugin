@@ -54,12 +54,7 @@ public class Materials {
     }
 
     public static double getDouble(String material, String dataName) {
-        double data = YML.getDouble(material + "." + dataName, Double.NaN);
-//        if (Double.isNaN(data)) {
-//            Bukkit.getLogger().severe("Р—РЅР°С‡РµРЅРёРµ \"" + material + "." + dataName + "\" РІ materials.yml РЅРµ РЅР°Р№РґРµРЅРѕ!");
-//            Bukkit.broadcast(ChatColor.DARK_RED + "Р—РЅР°С‡РµРЅРёРµ \"" + material + "." + dataName + "\" РІ materials.yml РЅРµ РЅР°Р№РґРµРЅРѕ!", "admin");
-//        }
-        return data;
+        return YML.getDouble(material + "." + dataName, Double.NaN);
     }
 
     public static void setValue(String material, String dataname, String value) {

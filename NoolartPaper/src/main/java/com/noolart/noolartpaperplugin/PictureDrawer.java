@@ -15,7 +15,7 @@ import org.bukkit.map.MapView.Scale;
 public class PictureDrawer extends MapRenderer {
     File picture;
     Scale scale;
-    boolean drawed = false;
+    boolean isDrawed = false;
     int x;
     int y;
 
@@ -28,7 +28,9 @@ public class PictureDrawer extends MapRenderer {
 
     @Override
     public void render(MapView map, MapCanvas canvas, Player p) {
-        if (drawed) return;
+        if (isDrawed)
+            return;
+
         BufferedImage img = null;
 
         try {
@@ -39,7 +41,6 @@ public class PictureDrawer extends MapRenderer {
 
         map.setScale(scale);
         canvas.drawImage(x, y, img);
-        drawed = true;
+        isDrawed = true;
     }
-
 }
