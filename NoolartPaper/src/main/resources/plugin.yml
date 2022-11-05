@@ -21,10 +21,13 @@ commands:
     usage: /pasteCsv <filename> <height>
   copyCsv:
     description: Копирует область между выделенными точками и сохраняет её в csv файл в папку с проектом
-    usage: /cCsv <filename>
+    usage: /copyCsv <filename>
   pasteCsv:
     description: Вставляет область из названного csv файла с началом в первой выделенной точке
-    usage: /cCsv <filename>
+    usage: /pasteCsv <filename>
+  pasteCsvHidden:
+    description: Вставляет область из названного csv файла с началом в первой выделенной точке, при этом, вставленная модель окружена стеной
+    usage: /pasteCsvHidden <filename>
   randomGeneration:
     description: Генерирует квадратный рандомный пласт моделей длиной 16*<distance>
     usage: /randomGeneration <distance>
