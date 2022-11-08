@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -45,11 +46,11 @@ public class NoolartPaperPlugin extends JavaPlugin {
 
 
         Materials.init();
-        Craft.init();
+        //Craft.init();
 
-        for (Object o : Craft.getAllValues().keySet()){
-            Bukkit.broadcastMessage(o.toString());
-        }
+//        for (Object o : Craft.getAllValues().keySet()){
+//            Bukkit.broadcastMessage(o.toString());
+//        }
 
 
         //***************************************************
@@ -57,15 +58,51 @@ public class NoolartPaperPlugin extends JavaPlugin {
         //CUSTOM CRAFTS
 
         ItemStack iron_bars = new ItemStack(Material.IRON_BARS,1);
-        ShapedRecipe shapedRecipe = new ShapedRecipe(iron_bars);
+        ShapedRecipe srIronBars = new ShapedRecipe(iron_bars);
 
-        shapedRecipe.shape("B*B","%*%","%B%");
+        srIronBars.shape("B*B","%*%","%B%");
 
-        shapedRecipe.setIngredient('B', Material.AIR,1);
-        shapedRecipe.setIngredient('%', Material.STICK,1);
-        shapedRecipe.setIngredient('*', Material.IRON_INGOT,1);
+        srIronBars.setIngredient('B', Material.AIR);
+        srIronBars.setIngredient('%', Material.STICK);
+        srIronBars.setIngredient('*', Material.IRON_INGOT);
 
-        getServer().addRecipe(shapedRecipe);
+        getServer().addRecipe(srIronBars);
+
+
+        ItemStack cobblestone = new ItemStack(Material.COBBLESTONE, 1);
+        ShapedRecipe srCobblestone = new ShapedRecipe(cobblestone);
+
+        srCobblestone.shape("BB ","BB ","   ");
+        srCobblestone.setIngredient('B',Material.CLAY);
+        getServer().addRecipe(srCobblestone);
+
+        srCobblestone = new ShapedRecipe(cobblestone);
+
+        srCobblestone.shape("   ","BB ","BB ");
+        srCobblestone.setIngredient('B',Material.CLAY);
+        getServer().addRecipe(srCobblestone);
+
+        srCobblestone = new ShapedRecipe(cobblestone);
+
+        srCobblestone.shape(" BB"," BB","   ");
+        srCobblestone.setIngredient('B',Material.CLAY);
+        getServer().addRecipe(srCobblestone);
+
+        srCobblestone = new ShapedRecipe(cobblestone);
+
+        srCobblestone.shape("   "," BB"," BB");
+        srCobblestone.setIngredient('B',Material.CLAY);
+        getServer().addRecipe(srCobblestone);
+
+
+
+
+
+
+        ItemStack iron_nugget = new ItemStack(Material.IRON_NUGGET, 1);
+        FurnaceRecipe furnaceRecipe = new FurnaceRecipe(iron_nugget, Material.CLAY);
+        furnaceRecipe.setExperience(10);
+        getServer().addRecipe(furnaceRecipe);
 
         //***************************************************
 

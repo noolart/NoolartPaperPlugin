@@ -48,7 +48,7 @@ import static com.noolart.noolartpaperplugin.NoolartPaperPlugin.finds;
 public class MyListener implements Listener {
     public NoolartPaperPlugin plugin;
 
-    public static String[] expShopStreight = {"18", "2", "20", "38", "14", "32", "26"};
+    public static String[] expShopStraight = {"18", "2", "20", "38", "14", "32", "26"};
     public static int[][] expShopValues = {{}, {18}, {18}, {18}, {2, 20}, {20, 38}, {14, 32}};
     private static final String[] graphicsNames = {"Density", "Magnetic", "Rad", "Res", "Vp", "Vs"};
     private static int baseID = 0;
@@ -102,8 +102,6 @@ public class MyListener implements Listener {
         File file = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + event.getPlayer().getName() + ".csv");
         if (!file.exists()) {
             try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
                 Scanner scan = new Scanner(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + "original.csv"));
                 PrintWriter pw = new PrintWriter(file);
 
@@ -120,13 +118,12 @@ public class MyListener implements Listener {
         HashMap<String, String> playerFind = new HashMap<>();
         Scanner scan = new Scanner(new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + event.getPlayer().getName() + ".csv"));
 
-//        Bukkit.broadcastMessage(scan.nextLine());
-//        Bukkit.broadcastMessage(NoolartPaperPlugin.plugin.getDataFolder() + File.separator +"users"+ File.separator + event.getPlayer().getName() + ".txt" );
+
         while (scan.hasNextLine()) {
             String s = scan.nextLine();
             String a = s.split(":")[0];
             String b = s.split(":")[1];
-//            Bukkit.broadcastMessage(a+":"+b+"\n");
+
             playerFind.put(a, b);
         }
         scan.close();
@@ -153,9 +150,9 @@ public class MyListener implements Listener {
                         for (int i1 = cy; i1 < cy + sth; i1++) {
                             for (int i2 = cz; i2 < cz + sth; i2++) {
                                 World w = p.getWorld();
-                                Location h = new Location(w, (double) i, (double) i1, (double) i2);
-                                writer.write(i + ";" + i1 + ";" + i2 + ";" + h.getBlock().getType().toString() + ";" + "\n");
-                                Bukkit.broadcastMessage(i + " " + i1 + " " + i2 + " " + h.getBlock().getType().toString());
+                                Location h = new Location(w, i, i1, i2);
+                                writer.write(i + ";" + i1 + ";" + i2 + ";" + h.getBlock().getType() + ";" + "\n");
+                                Bukkit.broadcastMessage(i + " " + i1 + " " + i2 + " " + h.getBlock().getType());
                             }
                         }
 
@@ -213,7 +210,7 @@ public class MyListener implements Listener {
                             }
 
                             World w = p.getWorld();
-                            Location h1 = new Location(w, (double) q, (double) q1, (double) q2);
+                            Location h1 = new Location(w, q, q1, q2);
                             assert theMaterial != null;
                             h1.getBlock().setType(theMaterial);
                             k = k + 4;
@@ -261,7 +258,7 @@ public class MyListener implements Listener {
                 }
 
                 ItemStack paper = player.getItemInHand();
-                String paperText = paper.getLore().get(0);
+                String paperText = Objects.requireNonNull(paper.getLore()).get(0);
                 int curBaseID = Integer.parseInt(paperText);
 
                 int x = 0;
@@ -295,9 +292,7 @@ public class MyListener implements Listener {
                     for (Entity entity : screenCenter.getNearbyEntities(2, 2, 2)) {
                         try {
                             entity.remove();
-                        } catch (UnsupportedOperationException unsupportedOperationException) {
-
-                        }
+                        } catch (UnsupportedOperationException ignored) {}
                     }
                 }
             }
@@ -306,12 +301,12 @@ public class MyListener implements Listener {
                 Block clickedBlock = event.getClickedBlock();
                 Location clickedBlockLocation = clickedBlock.getLocation();
 
-                Iterator iterator = clickedBlockLocation.add(0,1,2).getNearbyEntitiesByType(ItemFrame.class,1).iterator();
-                ItemFrame it = (ItemFrame) iterator.next();
+                Iterator<ItemFrame> iterator = clickedBlockLocation.add(0,1,2).getNearbyEntitiesByType(ItemFrame.class,1).iterator();
+                ItemFrame it = iterator.next();
 
-                Iterator iterator1 = clickedBlock.getLocation().add(0,1,0).getNearbyEntitiesByType(ItemFrame.class,1).iterator();
+                Iterator<ItemFrame> iterator1 = clickedBlock.getLocation().add(0,1,0).getNearbyEntitiesByType(ItemFrame.class,1).iterator();
 
-                ItemFrame screen = (ItemFrame) iterator1.next();
+                ItemFrame screen = iterator1.next();
                 screen.setItem(mapToStack( "microscope" + File.separator + it.getItem().getType().toString().toLowerCase()+".jpg",event.getPlayer().getWorld()));
 
             }
@@ -336,22 +331,23 @@ public class MyListener implements Listener {
 
             ItemStack i = player.getItemInHand();
 
-            if (event.getClickedBlock().getType() == Material.LECTERN && Materials.getString(i.getType().toString().toLowerCase(), "name") != ""
+            if (event.getClickedBlock().getType() == Material.LECTERN && !Materials.getString(i.getType().toString().toLowerCase(), "name").equals("")
                     && finds.get(event.getPlayer().getName()).get(event.getPlayer().getItemInHand().getType().toString().toLowerCase()).equals("false")) {
-                String finded = Materials.getString(i.getType().toString().toLowerCase(), "name");
+                String found = Materials.getString(i.getType().toString().toLowerCase(), "name");
 
                 Lectern l = (Lectern) event.getClickedBlock().getState();
                 LecternInventory lecternInventory = (LecternInventory) l.getInventory();
 
-                for (HumanEntity humanEntity : lecternInventory.getViewers()) {
+                    //for (HumanEntity humanEntity : lecternInventory.getViewers()) {
                     lecternInventory.close();
-                }
+                    // }
 
 //            e5.getPlayer().playSound(e5.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE,16f,1f);
+
                 event.getPlayer().getWorld().spawn(event.getClickedBlock().getLocation().add(0.5, 1, 0.5), Firework.class, firework -> {
 
                     FireworkMeta fm = firework.getFireworkMeta();
-                    List<Color> c = new ArrayList<Color>();
+                    List<Color> c = new ArrayList<>();
                     c.add(Color.PURPLE);
                     c.add(Color.GREEN);
                     c.add(Color.YELLOW);
@@ -362,10 +358,9 @@ public class MyListener implements Listener {
 
                 });
 
-                Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "============================" + "\n" + ChatColor.DARK_GREEN + "Поздравляем, ты нашел " + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + finded.toUpperCase() + ChatColor.RESET + ChatColor.DARK_GREEN + "!" + "\n" + "Теперь характеристи каждого блока типа " + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + finded.toUpperCase() + ChatColor.RESET + ChatColor.DARK_GREEN + " будут показываться на экране при наведении!" + "\n" + ChatColor.LIGHT_PURPLE + "============================");
-//            Materials.setValue(i.getItemStack().getType().toString().toLowerCase(),"finded","true");
+                event.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "============================" + "\n" + ChatColor.DARK_GREEN + "Поздравляем, ты нашел " + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + found.toUpperCase() + ChatColor.RESET + ChatColor.DARK_GREEN + "!" + "\n" + "Теперь характеристи каждого блока типа " + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + found.toUpperCase() + ChatColor.RESET + ChatColor.DARK_GREEN + " будут показываться на экране при наведении!" + "\n" + ChatColor.LIGHT_PURPLE + "============================");
+
                 finds.get(event.getPlayer().getName()).put(i.getType().toString().toLowerCase(), "true");
-//            Bukkit.broadcastMessage(i.getItemStack().getType().toString().toLowerCase()+":"+NoolartPaperPlugin.hashMap.get(i.getItemStack().getType().toString().toLowerCase()));
                 FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + event.getPlayer().getName() + ".csv");
                 String[] keys = new String[48];
                 String[] values = new String[48];
@@ -395,25 +390,13 @@ public class MyListener implements Listener {
             if(event.getClickedBlock().getType() == Material.POLISHED_BLACKSTONE) {
                 ItemStack paperWithBaseId = new ItemStack(Material.PAPER);
                 ItemMeta paperMeta = paperWithBaseId.getItemMeta();
-                paperMeta.setLore(Arrays.asList(Integer.toString(baseID)));
+                paperMeta.setLore(Collections.singletonList(Integer.toString(baseID)));
                 paperWithBaseId.setItemMeta(paperMeta);
                 player.getInventory().addItem(paperWithBaseId);
 
             }
-
-
         }
-
-
     }
-
-
-
-
-
-
-
-
 
     @EventHandler
     public void interact(InventoryOpenEvent inventoryOpenEvent) {
@@ -423,9 +406,15 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
-    public void interact(BlockPlaceEvent blockPlaceEvent) throws IOException, InterruptedException {
+    public void interact(BlockPlaceEvent blockPlaceEvent) {
         Block block = blockPlaceEvent.getBlock();
         BlockState blockState = block.getState();
+
+
+        if (block.getType() == Material.OAK_LOG){
+            NoolartPaperPlugin.point1 = block.getLocation().add(-2,0,-2);
+            PasteCsv.paste("tree",blockPlaceEvent.getPlayer());
+        }
 
 
 
@@ -447,8 +436,6 @@ public class MyListener implements Listener {
 
 
 
-
-//        String path = NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "observers.csv";
 
         if (block.getType() == Material.OBSERVER) {
             try (FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "observers.csv", true)) {
@@ -585,15 +572,12 @@ public class MyListener implements Listener {
 //            });
 //            thread.start();
 //            thread.join();
+
                 NoolartPaperPlugin.point1 = block.getLocation().clone();
                 PasteCsv.paste("microscope", blockPlaceEvent.getPlayer());
                 World w = blockPlaceEvent.getPlayer().getWorld();
-                w.spawn(block.getLocation().add(0, 1, 0), ItemFrame.class, itemFrame -> {
-                    itemFrame.setFacingDirection(BlockFace.NORTH, false);
-                });
-                w.spawn(block.getLocation().add(0, 1, 2), ItemFrame.class, itemFrame -> {
-                    itemFrame.setFacingDirection(BlockFace.UP);
-                });
+                w.spawn(block.getLocation().add(0, 1, 0), ItemFrame.class, itemFrame -> itemFrame.setFacingDirection(BlockFace.NORTH, false));
+                w.spawn(block.getLocation().add(0, 1, 2), ItemFrame.class, itemFrame -> itemFrame.setFacingDirection(BlockFace.UP));
 
         }
 
@@ -628,7 +612,8 @@ public class MyListener implements Listener {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    w1.print("");
+                assert w1 != null;
+                w1.print("");
                     w1.close();
                     File magnetic = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Magnetic.csv");
                     PrintWriter w2 = null;
@@ -637,7 +622,8 @@ public class MyListener implements Listener {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    w2.print("");
+                assert w2 != null;
+                w2.print("");
                     w2.close();
                     File resistivity = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Res.csv");
                     PrintWriter w3 = null;
@@ -646,7 +632,8 @@ public class MyListener implements Listener {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    w3.print("");
+                assert w3 != null;
+                w3.print("");
                     w3.close();
                     File vpspeed = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Vp.csv");
                     PrintWriter w4 = null;
@@ -655,7 +642,8 @@ public class MyListener implements Listener {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    w4.print("");
+                assert w4 != null;
+                w4.print("");
                     w4.close();
                     File vsspeed = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Vs.csv");
                     PrintWriter w5 = null;
@@ -664,7 +652,8 @@ public class MyListener implements Listener {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    w5.print("");
+                assert w5 != null;
+                w5.print("");
                     w5.close();
                     File rad = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "res" + File.separator + "Rad.csv");
                     PrintWriter w6 = null;
@@ -673,7 +662,8 @@ public class MyListener implements Listener {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    w6.print("");
+                assert w6 != null;
+                w6.print("");
                     w6.close();
 
 
@@ -683,7 +673,7 @@ public class MyListener implements Listener {
 
 
                     Chest chest = (Chest) blockPlaceEvent.getBlock().getLocation().add(0, 1, -4).getBlock().getState();
-                    List<ItemStack> kern = new ArrayList();
+                    List<ItemStack> kern = new ArrayList<>();
 
                     Player p = blockPlaceEvent.getPlayer();
                     World w = p.getWorld();
@@ -747,8 +737,8 @@ public class MyListener implements Listener {
                         itemMeta.setDisplayName(ChatColor.YELLOW + Materials.getString(item.getType().toString().toLowerCase(), "name"));
                         item.setItemMeta(itemMeta);
 
-                        if (currentSlot > 0 && chest.getInventory().getItem(currentSlot - 1).getType() == item.getType()) {
-                            int amount = chest.getInventory().getItem(currentSlot - 1).getAmount() + 1;
+                        if (currentSlot > 0 && Objects.requireNonNull(chest.getInventory().getItem(currentSlot - 1)).getType() == item.getType()) {
+                            int amount = Objects.requireNonNull(chest.getInventory().getItem(currentSlot - 1)).getAmount() + 1;
                             item.setAmount(amount);
                             chest.getInventory().setItem(currentSlot - 1, item);
                         } else {
@@ -777,7 +767,6 @@ public class MyListener implements Listener {
                         z = 3;
                     }
 
-                    x = -4;
                     y = 3;
                     z = -1;
                     for (int i = 0; i < 3; i++) {
@@ -815,10 +804,9 @@ public class MyListener implements Listener {
 
                     x = 1;
                     y = 3;
-                    z = -4;
 
 
-                    for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 3; i++) {
                         for (int j = 0; j < 3; j++) {
                             int finalI = i;
                             int finalJ = j;
@@ -851,7 +839,6 @@ public class MyListener implements Listener {
                         z = -3;
                     }
 
-                    x = 4;
                     y = 3;
                     z = 1;
                     for (int i = 0; i < 3; i++) {
@@ -981,9 +968,6 @@ public class MyListener implements Listener {
             File balanceCheck = new File(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + inventoryClickEvent.getWhoClicked().getName() + "_balance.csv");
 
             if (!balanceCheck.exists()) {
-                balanceCheck.getParentFile().mkdirs();
-                balanceCheck.createNewFile();
-
                 PrintWriter pw = new PrintWriter(balanceCheck);
                 pw.write(Integer.toString(1000));
                 pw.close();
@@ -996,7 +980,7 @@ public class MyListener implements Listener {
                 if (balance - price >= 0) {
                     balance -= price;
                     Objects.requireNonNull(Bukkit.getPlayer(inventoryClickEvent.getWhoClicked().getName())).getInventory().addItem(cursor);
-                    Bukkit.getPlayer(inventoryClickEvent.getWhoClicked().getName()).sendMessage(ChatColor.GOLD + "Вы купили " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + Materials.getString(cursor.getType().toString().toLowerCase(), "name") + ChatColor.RESET + ChatColor.GOLD + " Теперь ваш баланс: " + balance + "$");
+                    Objects.requireNonNull(Bukkit.getPlayer(inventoryClickEvent.getWhoClicked().getName())).sendMessage(ChatColor.GOLD + "Вы купили " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + Materials.getString(cursor.getType().toString().toLowerCase(), "name") + ChatColor.RESET + ChatColor.GOLD + " Теперь ваш баланс: " + balance + "$");
                     FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + inventoryClickEvent.getWhoClicked().getName() + "_balance.csv", false);
                     writer.write(Integer.toString(balance));
                     writer.close();
@@ -1015,14 +999,14 @@ public class MyListener implements Listener {
                     if (stack.getType() == cursor.getType()) {
                         stack.setAmount(stack.getAmount() - 1);
                         balance += ((int) (price * 0.8));
-                        Bukkit.getPlayer(inventoryClickEvent.getWhoClicked().getName()).sendMessage(ChatColor.GOLD + "Вы продали " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + Materials.getString(cursor.getType().toString().toLowerCase(), "name") + ChatColor.RESET + ChatColor.GOLD + " Теперь ваш баланс: " + balance + "$");
+                        Objects.requireNonNull(Bukkit.getPlayer(inventoryClickEvent.getWhoClicked().getName())).sendMessage(ChatColor.GOLD + "Вы продали " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + Materials.getString(cursor.getType().toString().toLowerCase(), "name") + ChatColor.RESET + ChatColor.GOLD + " Теперь ваш баланс: " + balance + "$");
                         FileWriter writer = new FileWriter(NoolartPaperPlugin.plugin.getDataFolder() + File.separator + "users" + File.separator + inventoryClickEvent.getWhoClicked().getName() + "_balance.csv", false);
                         writer.write(Integer.toString(balance));
                         writer.close();
                         return;
                     }
                 }
-                ((Player) inventoryClickEvent.getWhoClicked()).sendMessage(ChatColor.DARK_RED + "У Вас нет нужного предмета!");
+                (inventoryClickEvent.getWhoClicked()).sendMessage(ChatColor.DARK_RED + "У Вас нет нужного предмета!");
             }
         }
 
@@ -1037,9 +1021,10 @@ public class MyListener implements Listener {
 
             if (cursor.getType() != Material.YELLOW_STAINED_GLASS_PANE && cursor.getType() != Material.RED_STAINED_GLASS_PANE && cursor.getType() != Material.ORANGE_STAINED_GLASS_PANE && cursor.getType() != Material.LIME_STAINED_GLASS_PANE) {
                 //p.sendMessage(Integer.toString(inventoryClickEvent.getSlot()));
-                for (int slots : expShopValues[Arrays.asList(expShopStreight).indexOf(Integer.toString(inventoryClickEvent.getSlot()))]) {
+                for (int slots : expShopValues[Arrays.asList(expShopStraight).indexOf(Integer.toString(inventoryClickEvent.getSlot()))]) {
                     //Bukkit.broadcastMessage(Integer.toString(slots));
                     ItemStack itemInSlot = expShop.getItem(slots);
+                    assert itemInSlot != null;
                     ItemMeta checkMending = itemInSlot.getItemMeta();
 
                     if (!checkMending.hasEnchant(Enchantment.MENDING)) {
@@ -1066,7 +1051,7 @@ public class MyListener implements Listener {
                             expShop.setItem(slot + 1, new ItemStack(Material.LIME_STAINED_GLASS_PANE));
                             for (int i = 0; i < 5; i++) {
                                 if (slot != 0 && expShop.getItem(slot - 1) != null) {
-                                    if (expShop.getItem(slot - 1).getType() == Material.RED_STAINED_GLASS_PANE) {
+                                    if (Objects.requireNonNull(expShop.getItem(slot - 1)).getType() == Material.RED_STAINED_GLASS_PANE) {
 
                                         expShop.setItem(slot - 1, new ItemStack(Material.LIME_STAINED_GLASS_PANE));
                                         slot--;
@@ -1074,11 +1059,11 @@ public class MyListener implements Listener {
                                         break;
                                     }
 
-                                } else if (slot + 9 <= 44 && expShop.getItem(slot + 9) != null && expShop.getItem(slot + 9).getType() == Material.RED_STAINED_GLASS_PANE) {
+                                } else if (slot + 9 <= 44 && expShop.getItem(slot + 9) != null && Objects.requireNonNull(expShop.getItem(slot + 9)).getType() == Material.RED_STAINED_GLASS_PANE) {
 
                                     expShop.setItem(slot + 9, new ItemStack(Material.LIME_STAINED_GLASS_PANE));
                                     slot += 9;
-                                } else if (slot != 0 && expShop.getItem(slot - 9) != null && expShop.getItem(slot - 9).getType() == Material.RED_STAINED_GLASS_PANE) {
+                                } else if (slot != 0 && expShop.getItem(slot - 9) != null && Objects.requireNonNull(expShop.getItem(slot - 9)).getType() == Material.RED_STAINED_GLASS_PANE) {
                                     expShop.setItem(slot - 9, new ItemStack(Material.LIME_STAINED_GLASS_PANE));
                                     slot -= 9;
                                 } else {
@@ -1092,10 +1077,10 @@ public class MyListener implements Listener {
                 } else {
                     p.sendMessage(ChatColor.DARK_RED + "Сначала открой предыдущие навыки!");
                 }
-            } else if (inventoryClickEvent.getCurrentItem().getType() == Material.ORANGE_STAINED_GLASS_PANE) {
+            } else if (Objects.requireNonNull(inventoryClickEvent.getCurrentItem()).getType() == Material.ORANGE_STAINED_GLASS_PANE) {
                 p.closeInventory();
 
-                int page = Integer.parseInt(String.valueOf(expShop.getItem(53).getItemMeta().getDisplayName().charAt(21)));
+                int page = Integer.parseInt(String.valueOf(Objects.requireNonNull(expShop.getItem(53)).getItemMeta().getDisplayName().charAt(21)));
 
                 expShop = Bukkit.createInventory(null, 54, "Experience Shop Page " + page);
 
@@ -1141,8 +1126,6 @@ public class MyListener implements Listener {
                     up.setItemMeta(upItemMeta);
                     expShop.setItem(53, up);
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1152,7 +1135,7 @@ public class MyListener implements Listener {
 
                 p.closeInventory();
 
-                int page = Integer.parseInt(String.valueOf(expShop.getItem(45).getItemMeta().getDisplayName().charAt(20)));
+                int page = Integer.parseInt(String.valueOf(Objects.requireNonNull(expShop.getItem(45)).getItemMeta().getDisplayName().charAt(20)));
 
 
                 expShop = Bukkit.createInventory(null, 54, "Experience Shop Page " + page);
@@ -1175,7 +1158,8 @@ public class MyListener implements Listener {
                             ItemStack itemStack = new ItemStack(Material.valueOf(current[0]));
 
 
-                            ItemMeta itemMeta = itemStack.getItemMeta();
+                            ItemMeta itemMeta;
+                            itemMeta = itemStack.getItemMeta();
                             itemMeta.setDisplayName("" + org.bukkit.ChatColor.GREEN + org.bukkit.ChatColor.BOLD + current[1]);
 
 
@@ -1208,8 +1192,6 @@ public class MyListener implements Listener {
                     expShop.setItem(53, up);
 
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1247,12 +1229,12 @@ public class MyListener implements Listener {
             File file = new File(path);
             Scanner scan = new Scanner(file);
 
-            String text = "";
+            StringBuilder text = new StringBuilder();
 
 
             while (scan.hasNextLine()) {
                 String string1 = scan.nextLine();
-                text += string1;
+                text.append(string1);
             }
             //System.out.println(text);
             scan.close();
@@ -1260,7 +1242,7 @@ public class MyListener implements Listener {
 //			Bukkit.broadcastMessage();
 
 
-            String[] symbols = text.split(";");
+            String[] symbols = text.toString().split(";");
 
             for (int i = 0; i < symbols.length; i = i + 3) {
                 int x = Integer.parseInt(symbols[i]);
@@ -1370,7 +1352,7 @@ public class MyListener implements Listener {
     @EventHandler
     public void interact(PlayerExpChangeEvent playerExpChangeEvent) {
         Player p = playerExpChangeEvent.getPlayer();
-        Bukkit.broadcastMessage(Float.toString(p.getTotalExperience()));
+        p.sendMessage(Float.toString(p.getTotalExperience()));
         if (p.getTotalExperience() > 51 && p.getTotalExperience() < 58) {
             p.sendMessage("" + ChatColor.AQUA + "У тебя достаточно опыта для получения нового навыка! Приобрети его " + ChatColor.GREEN + ChatColor.BOLD + "/expShop");
 
@@ -1424,9 +1406,9 @@ public class MyListener implements Listener {
     @EventHandler
     public void interact (PlayerInteractEntityEvent playerInteractEntityEvent){
 
-        Bukkit.broadcastMessage(playerInteractEntityEvent.getRightClicked().getCustomName());
+        //Bukkit.broadcastMessage(playerInteractEntityEvent.getRightClicked().getCustomName());
 
-        if ( playerInteractEntityEvent.getRightClicked().getCustomName().equals("" + ChatColor.AQUA + ChatColor.BOLD + "Играть")){
+        if ( Objects.requireNonNull(playerInteractEntityEvent.getRightClicked().getCustomName()).equals("" + ChatColor.AQUA + ChatColor.BOLD + "Играть")){
             playerInteractEntityEvent.getPlayer().teleport(new Location (playerInteractEntityEvent.getPlayer().getWorld(),1006, 139, 1006));
         }
 
