@@ -29,15 +29,11 @@ public class MyListener1 implements Listener {
                 long sum = 0;
                 Location cur = new Location(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockY() + 0.6, p.getLocation().getBlockZ());
 
-                for (int x = p.getLocation().add(0, 0.6, 0).getBlockX() - 15; x <= p.getLocation().add(0, 0.6, 0).getBlockX() + 15; x++) {
+                for (int x = p.getLocation().add(0, 0.6, 0).getBlockX() - 3; x <= p.getLocation().add(0, 0.6, 0).getBlockX() + 3; x++) {
                     for (int y = p.getLocation().add(0, 0.6, 0).getBlockY() - 15; y <= p.getLocation().add(0, 0.6, 0).getBlockY() - 1; y++) {
-                        for (int z = p.getLocation().add(0, 0.6, 0).getBlockZ() - 15; z <= p.getLocation().add(0, 0.6, 0).getBlockZ() + 15; z++) {
+                        for (int z = p.getLocation().add(0, 0.6, 0).getBlockZ() - 3; z <= p.getLocation().add(0, 0.6, 0).getBlockZ() + 3; z++) {
 
                             Location loc = new Location(p.getWorld(), x, y, z);
-
-                            //loc.getBlock().setType(Material.POLISHED_ANDESITE );
-                            //Bukkit.broadcastMessage(Double.parseDouble(Materials.getString(loc.getBlock().getType().toString().toLowerCase(), "Density"))+"");
-
 
                             double sol = Double.parseDouble(Materials.getString(loc.getBlock().getType().toString().toLowerCase(), "Density"));
                             sum += sol / (loc.distance(cur) * loc.distance(cur));

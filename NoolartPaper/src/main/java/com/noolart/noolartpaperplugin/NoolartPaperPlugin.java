@@ -5,6 +5,7 @@ import com.noolart.noolartpaperplugin.csv.CopyCsv;
 import com.noolart.noolartpaperplugin.csv.GenerationFromCsv;
 import com.noolart.noolartpaperplugin.csv.PasteCsv;
 import com.noolart.noolartpaperplugin.csv.PasteCsvHidden;
+import com.noolart.noolartpaperplugin.levels.Level1;
 import com.noolart.noolartpaperplugin.listener.MyListener;
 import com.noolart.noolartpaperplugin.listener.MyListener1;
 import com.noolart.noolartpaperplugin.listener.MyListener2;
@@ -30,7 +31,7 @@ public class NoolartPaperPlugin extends JavaPlugin {
 
     public static Location point1;
     public static Location point2;
-    public static HashMap<String, HashMap<String, String>> finds = new HashMap<String, HashMap<String, String>>();
+    public static HashMap<String, HashMap<String, String>> finds = new HashMap<>();
     public static HashMap<String, Integer> shopPrices = new HashMap<>();
     public static Inventory shop;
     public static Inventory expShop;
@@ -177,6 +178,7 @@ public class NoolartPaperPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MyListener(), this);
         getServer().getPluginManager().registerEvents(new MyListener1(), this);
         getServer().getPluginManager().registerEvents(new MyListener2(), this);
+        getServer().getPluginManager().registerEvents(new Level1(), this);
 
         Objects.requireNonNull(getCommand("pythonrun")).setExecutor(new Commands(this));
         Objects.requireNonNull(getCommand("copyBin")).setExecutor(new Commands1(this));
@@ -198,27 +200,30 @@ public class NoolartPaperPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("chest")).setExecutor(new ChestHack(this));
         Objects.requireNonNull(getCommand("perlingeneration")).setExecutor(new PerlinGeneration(this));
         Objects.requireNonNull(getCommand("slice")).setExecutor(new Slice(this));
+        Objects.requireNonNull(getCommand("image")).setExecutor(new Image(this));
+        Objects.requireNonNull(getCommand("video")).setExecutor(new Video(this));
+        Objects.requireNonNull(getCommand("diagonal")).setExecutor(new Diagonal(this));
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 Block b = p.getTargetBlock(20);
 
-                if (b == null || b.getType() == null || Materials.getKeys(b.getType().toString().toLowerCase()).size() == 0) {
+                if (b == null || Materials.getKeys(b.getType().toString().toLowerCase()).size() == 0) {
                     p.sendActionBar(" ");
                     continue;
                 }
 
-                String res = ChatColor.AQUA + Materials.getString(b.getType().toString().toLowerCase(), "name") + ":" + ChatColor.WHITE;
+                StringBuilder res = new StringBuilder(ChatColor.AQUA + Materials.getString(b.getType().toString().toLowerCase(), "name") + ":" + ChatColor.WHITE);
                 for (String key : Materials.getKeys(b.getType().toString().toLowerCase())) {
                     if (key.equals("name")) continue;
                     if (key.equals("finded")) continue;
 //                    Bukkit.broadcastMessage(b.getType().toString().toLowerCase()+":"+hashMap.get(b.getType().toString().toLowerCase()));
                     //if (finds.get(p.getName()).get(b.getType().toString().toLowerCase()).equals("true")) {
-                        res += " " + key + "=" + Materials.getString(b.getType().toString().toLowerCase(), key);
+                        res.append(" ").append(key).append("=").append(Materials.getString(b.getType().toString().toLowerCase(), key));
                     //}
                 }
                 p.sendActionBar();
-                p.sendActionBar(res);
+                p.sendActionBar(res.toString());
             }
 
         }, 5, 5);

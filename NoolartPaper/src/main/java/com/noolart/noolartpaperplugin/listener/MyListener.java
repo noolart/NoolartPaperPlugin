@@ -7,6 +7,8 @@ import com.noolart.noolartpaperplugin.csv.PasteCsv;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.*;
+import org.bukkit.block.data.Openable;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -23,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.LecternInventory;
+import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MapMeta;
@@ -72,17 +75,60 @@ public class MyListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws FileNotFoundException {
 
+        World w = event.getPlayer().getWorld();
+
 
         //***********************************
         //TODO уберите эту сторчку в случае создания нового игрового мира
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 99, -57,-99));
-        event.getPlayer().getWorld().spawn(event.getPlayer().getLocation().add(0.5,0,3.5), Villager.class, villager -> {
-            villager.setRotation(180,0);
-            villager.setCanPickupItems(false);
-            villager.setProfession(Villager.Profession.NONE);
-            villager.setCustomName("" + ChatColor.AQUA + ChatColor.BOLD +"Играть");
-            villager.setAI(false);
-        });
+//        event.getPlayer().getWorld().spawn(event.getPlayer().getLocation().add(0.5,0,3.5), Villager.class, villager -> {
+//            villager.setRotation(180,0);
+//            villager.setCanPickupItems(false);
+//            villager.setProfession(Villager.Profession.NONE);
+//            villager.setCustomName("" + ChatColor.AQUA + ChatColor.BOLD +"Играть");
+//            villager.setAI(false);
+//        });
+//
+//        event.getPlayer().getWorld().spawn(new Location(event.getPlayer().getWorld(),896.5, 94,1055.5), Villager.class, villager -> {
+//            villager.setRotation(180,0);
+//            villager.setCanPickupItems(false);
+//            villager.setProfession(Villager.Profession.NONE);
+//            villager.setCustomName("" + ChatColor.AQUA + ChatColor.BOLD +"Уровень 2");
+//            villager.setAI(false);
+//        });
+
+//        event.getPlayer().getWorld().spawn(new Location(event.getPlayer().getWorld(), 889.5,94,1048.5), Villager.class, villager -> {
+//            villager.setRotation(225,0);
+//            villager.setCanPickupItems(false);
+//            villager.setProfession(Villager.Profession.NONE);
+//            villager.setCustomName("" + ChatColor.AQUA + ChatColor.BOLD +"Торговец");
+//            villager.setProfession(Villager.Profession.ARMORER);
+//            villager.setCanPickupItems(false);
+//            villager.setAI(false);
+//            villager.setVillagerLevel(5);
+//            ItemStack tag = new ItemStack (Material.NAME_TAG, 1);
+//            ItemMeta tagItemMeta = tag.getItemMeta();
+//            tagItemMeta.setDisplayName(ChatColor.AQUA +  "Ключ");
+//            tag.setItemMeta(tagItemMeta);
+//            MerchantRecipe merchantRecipe = new MerchantRecipe(tag, 1000000);
+//            merchantRecipe.setIngredients(Collections.singletonList(new ItemStack(Material.DIAMOND, 10)));
+//            List <MerchantRecipe> merchantRecipeList = Collections.singletonList(merchantRecipe);
+//            villager.setRecipes(merchantRecipeList);
+//
+//
+//        });
+//
+//
+//
+//        Image.pasteImageInItemFrame( "cobblecraft.png", BlockFace.SOUTH, new Location (event.getPlayer().getLocation().getWorld(), 1001.00, 140.00, 1001.00).getBlock());
+//
+//
+//
+//
+//        Image.pasteImageInItemFrame("diagonal.png",BlockFace.WEST, w.getBlockAt( 787 ,124, 1208));
+//        Image.pasteImageInItemFrame("vertical.png",BlockFace.WEST, w.getBlockAt( 787 ,124, 1204));
+//
+
         //***********************************
 
 
@@ -249,6 +295,40 @@ public class MyListener implements Listener {
         if (action == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
             ItemStack itemStack = player.getItemInHand();
+
+            if (event.getClickedBlock().getType() == Material.JUNGLE_BUTTON){
+
+                Block b = event.getClickedBlock();
+                Player p = event.getPlayer();
+                Location l = b.getLocation();
+
+                if ((int)l.getX() == 787 && (int)l.getY() == 122 && (int)l.getZ() == 1207){
+                    p.sendMessage ("" + ChatColor.GREEN + ChatColor.BOLD + "ПРАВИЛЬНО!");
+                    l.getWorld().playSound(l,Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE,1f,1);
+                }
+
+                else if ((int)l.getX() == 787 && (int)l.getY() == 122 && (int)l.getZ() == 1203){
+                    p.sendMessage("" + ChatColor.RED + ChatColor.BOLD + "НЕПРАВИЛЬНО!");
+                    l.getWorld().playSound(l,Sound.BLOCK_BEACON_DEACTIVATE,1f,1);
+                }
+
+
+
+            }
+
+
+
+            if (event.getClickedBlock().getType() == Material.IRON_DOOR && player.getItemInHand().getType() == Material.NAME_TAG && player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Ключ")){
+
+
+                BlockState blockState = event.getClickedBlock().getState();
+
+                Openable openable = (Openable) blockState.getBlockData();
+                openable.setOpen(true);
+                blockState.setBlockData(openable);blockState.update();
+                event.getPlayer().playSound(blockState.getBlock().getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1,1);
+
+            }
 
 
             if (event.getClickedBlock().getType() == Material.SPONGE && player.getItemInHand().getType() == Material.PAPER) {
@@ -1409,11 +1489,16 @@ public class MyListener implements Listener {
         //Bukkit.broadcastMessage(playerInteractEntityEvent.getRightClicked().getCustomName());
 
         if ( Objects.requireNonNull(playerInteractEntityEvent.getRightClicked().getCustomName()).equals("" + ChatColor.AQUA + ChatColor.BOLD + "Играть")){
-            playerInteractEntityEvent.getPlayer().teleport(new Location (playerInteractEntityEvent.getPlayer().getWorld(),1006, 139, 1006));
+            playerInteractEntityEvent.getPlayer().teleport(new Location (playerInteractEntityEvent.getPlayer().getWorld(),896.5, 94, 1046));
+        }
+
+        if ( Objects.requireNonNull(playerInteractEntityEvent.getRightClicked().getCustomName()).equals("" + ChatColor.AQUA + ChatColor.BOLD + "Уровень 2")){
+            playerInteractEntityEvent.getPlayer().teleport(new Location (playerInteractEntityEvent.getPlayer().getWorld(),790, 122, 1206));
         }
 
 
     }
+
 
 
 }

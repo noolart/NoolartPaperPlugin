@@ -64,6 +64,15 @@ commands:
   slice:
     description: Считывает срез между двумя установленными точками
     usage: /slice <name>
+  image:
+    description:
+    usage: /image <image_name> <coord>
+  video:
+    description:
+    usage: /video <video_name> <coord>
+  diagonal:
+    description: /diagonal
+    usage: Строит диагональный срез между двумя точками
 
 
 

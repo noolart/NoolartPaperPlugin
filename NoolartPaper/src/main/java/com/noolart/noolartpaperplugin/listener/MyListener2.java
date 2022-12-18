@@ -1,7 +1,5 @@
 package com.noolart.noolartpaperplugin.listener;
 
-import com.noolart.noolartpaperplugin.Materials;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -109,7 +107,5 @@ public class MyListener2 implements Listener {
         for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR +""+c;
         return hidden;
     }
-
-
 
 }
