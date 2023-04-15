@@ -64,6 +64,9 @@ commands:
   slice:
     description: Считывает срез между двумя установленными точками
     usage: /slice <name>
+  electrical:
+    description: Проводит электроразведку между двумя установленными точками
+    usage: /electrical <name>
   image:
     description:
     usage: /image <image_name> <coord>

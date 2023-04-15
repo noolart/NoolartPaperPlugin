@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -33,8 +34,9 @@ public class NoolartPaperPlugin extends JavaPlugin {
     public static Location point2;
     public static HashMap<String, HashMap<String, String>> finds = new HashMap<>();
     public static HashMap<String, Integer> shopPrices = new HashMap<>();
-    public static Inventory shop;
+    public static Inventory shop, chooseToBuild;
     public static Inventory expShop;
+    public static File readCommand;
 
 
     public NoolartPaperPlugin() {
@@ -57,6 +59,11 @@ public class NoolartPaperPlugin extends JavaPlugin {
         //***************************************************
 
         //CUSTOM CRAFTS
+
+
+
+        readCommand = new File (plugin.getDataFolder().getAbsolutePath() + File.separator + "readCommand.txt");
+
 
         ItemStack iron_bars = new ItemStack(Material.IRON_BARS,1);
         ShapedRecipe srIronBars = new ShapedRecipe(iron_bars);
@@ -106,6 +113,8 @@ public class NoolartPaperPlugin extends JavaPlugin {
         getServer().addRecipe(furnaceRecipe);
 
         //***************************************************
+
+        chooseToBuild = Bukkit.createInventory(null, 9,"" + net.md_5.bungee.api.ChatColor.DARK_RED + net.md_5.bungee.api.ChatColor.BOLD + "Что строим?");
 
         expShop = Bukkit.createInventory(null, 54, "Experience Shop Page 1");
 
@@ -200,9 +209,15 @@ public class NoolartPaperPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("chest")).setExecutor(new ChestHack(this));
         Objects.requireNonNull(getCommand("perlingeneration")).setExecutor(new PerlinGeneration(this));
         Objects.requireNonNull(getCommand("slice")).setExecutor(new Slice(this));
+        Objects.requireNonNull(getCommand("electrical")).setExecutor(new ElectricalProspecting(this));
         Objects.requireNonNull(getCommand("image")).setExecutor(new Image(this));
         Objects.requireNonNull(getCommand("video")).setExecutor(new Video(this));
         Objects.requireNonNull(getCommand("diagonal")).setExecutor(new Diagonal(this));
+
+
+
+
+
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
@@ -226,8 +241,25 @@ public class NoolartPaperPlugin extends JavaPlugin {
                 p.sendActionBar(res.toString());
             }
 
-        }, 5, 5);
+            /*
+            if (readCommand.length()!=0){
+                try (BufferedReader bfr = new BufferedReader(new FileReader(readCommand))) {
+                    String command = bfr.readLine();
 
+                    Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+                    List<Player> listed = new ArrayList<Player>(players);
+
+                    Player randomPlayer = listed.get(new Random().nextInt(listed.size()));
+                    Bukkit.broadcastMessage(randomPlayer.getName());
+                    executeCommand(randomPlayer,command);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            */
+
+        }, 5, 5);
 
 
     }
@@ -237,4 +269,9 @@ public class NoolartPaperPlugin extends JavaPlugin {
     public void onDisable() {
 
     }
+
+    private void executeCommand (Player p, String cmd){
+        getServer().dispatchCommand(p, cmd);
+    }
+
 }

@@ -16,11 +16,8 @@ public class Commands implements CommandExecutor {
         try {
 
             File toRun = new File (NoolartPaperPlugin.plugin.getDataFolder() + File.separator + filename + ".py");
-
             String command = "python " + toRun.getAbsolutePath() + " " + "--id=" + argument;
-
             Process p = Runtime.getRuntime().exec(command);
-
 
             BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
@@ -28,9 +25,6 @@ public class Commands implements CommandExecutor {
             while ((s = in.readLine()) != null) {
                 Bukkit.broadcastMessage(ChatColor.BLUE + s);
             }
-
-
-
             in.close();
 
 

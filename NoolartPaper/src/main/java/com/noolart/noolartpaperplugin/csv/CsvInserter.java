@@ -40,6 +40,7 @@ public class CsvInserter {
     }
 
     public static void paste(File file){
+
         CsvParserSettings settings = new CsvParserSettings();
         settings.setDelimiterDetectionEnabled(true);
         CsvParser parser = new CsvParser(settings);
@@ -62,9 +63,9 @@ public class CsvInserter {
                     double dx = x + Integer.parseInt(row[CORD_X]);
                     double dy = y + Integer.parseInt(row[CORD_Y]);
                     double dz = z + Integer.parseInt(row[CORD_Z]);
-
-                    //System.out.println(dx+" "+ dy+ " "+dz);
-                    //System.out.println(row[MATERIAL].toUpperCase());
+//
+//                    System.out.println(dx+" "+ dy+ " "+dz);
+//                   System.out.println(row[MATERIAL].toUpperCase());
 
                     location.set(dx, dy, dz);
                     location.getBlock().setType(Material.valueOf(row[MATERIAL].toUpperCase()));
@@ -74,8 +75,17 @@ public class CsvInserter {
                 }
             }
 
-            NoolartPaperPlugin.point1 = locationBackUp;
-            Bukkit.broadcastMessage("Done!");
+          if (file.getName().equals("OilRid.csv")){
+              NoolartPaperPlugin.point1 = locationBackUp.add(1,0,1);
+          }
+          else if (file.getName().equals("budka.csv")){
+              NoolartPaperPlugin.point1 = locationBackUp.add(3,3,3);
+          }
+
+
+
+          NoolartPaperPlugin.point1 = locationBackUp.add(0,-1,0);
+           // Bukkit.broadcastMessage("Done!");
         } catch (Exception e) {
             Bukkit.broadcastMessage("File" + file.getAbsolutePath() + "not found");
         } finally {
@@ -84,7 +94,7 @@ public class CsvInserter {
 
         long finish = System.currentTimeMillis();
         long elapsed = finish - start;
-        Bukkit.broadcastMessage("вставка модели заняла: " + elapsed + "миллисекунд");
+        //Bukkit.broadcastMessage("вставка модели заняла: " + elapsed + "миллисекунд");
     }
 
     public static void pasteHidden(String filename) {

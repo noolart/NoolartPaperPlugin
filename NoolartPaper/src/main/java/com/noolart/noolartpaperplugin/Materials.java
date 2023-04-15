@@ -36,10 +36,10 @@ public class Materials {
         String data = YML.getString(material + "." + dataName, "");
         assert data != null;
         if (data.equals("")) {
-            Bukkit.getLogger().severe("Р—РЅР°С‡РµРЅРёРµ \"" + material + "." + dataName + "\" РІ materials.yml РЅРµ РЅР°Р№РґРµРЅРѕ!");
-            Bukkit.broadcast(ChatColor.DARK_RED + "Р—РЅР°С‡РµРЅРёРµ \"" + material + "." + dataName + "\" РІ materials.yml РЅРµ РЅР°Р№РґРµРЅРѕ!", "admin");
+            data = YML.getString( "universal" + "." + dataName, "");
         }
         return data;
+
     }
 
     public static long getLong(String material, String dataName) {
@@ -47,10 +47,9 @@ public class Materials {
             long data = YML.getLong(material + "." + dataName, -1);
             return data;
         } catch (Exception e) {
-            e.printStackTrace();
+            long data = YML.getLong( "universal" + "." + dataName, -1);
+            return data;
         }
-
-        return -1;
     }
 
     public static double getDouble(String material, String dataName) {
