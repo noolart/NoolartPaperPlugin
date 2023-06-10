@@ -76,6 +76,12 @@ commands:
   diagonal:
     description: /diagonal
     usage: Строит диагональный срез между двумя точками
+  text:
+    description: /text <body>
+    usage: Создает текст на позиции point1
+  textRemove:
+    description: /textRemove
+    usage: Удаляет текст вокруг
 
 
 

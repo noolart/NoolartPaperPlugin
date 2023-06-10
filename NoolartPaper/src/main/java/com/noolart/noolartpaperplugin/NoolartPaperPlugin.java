@@ -213,8 +213,8 @@ public class NoolartPaperPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("image")).setExecutor(new Image(this));
         Objects.requireNonNull(getCommand("video")).setExecutor(new Video(this));
         Objects.requireNonNull(getCommand("diagonal")).setExecutor(new Diagonal(this));
-
-
+        Objects.requireNonNull(getCommand("text")).setExecutor(new Text(this));
+        Objects.requireNonNull(getCommand("textRemove")).setExecutor(new TextRemove(this));
 
 
 
@@ -241,23 +241,7 @@ public class NoolartPaperPlugin extends JavaPlugin {
                 p.sendActionBar(res.toString());
             }
 
-            /*
-            if (readCommand.length()!=0){
-                try (BufferedReader bfr = new BufferedReader(new FileReader(readCommand))) {
-                    String command = bfr.readLine();
 
-                    Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
-                    List<Player> listed = new ArrayList<Player>(players);
-
-                    Player randomPlayer = listed.get(new Random().nextInt(listed.size()));
-                    Bukkit.broadcastMessage(randomPlayer.getName());
-                    executeCommand(randomPlayer,command);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            */
 
         }, 5, 5);
 
